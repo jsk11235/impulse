@@ -1,7 +1,7 @@
 <html>
   <head></head>
   <body>
-  <center align="center">
+  <p align="center">
   <img src="https://user-images.githubusercontent.com/67127399/170313423-6a3eff48-c339-47b3-80f2-5778aafbb511.png" width="250px" height="150px">
 
   <h1>DrBracket</h1>
@@ -16,6 +16,6 @@ This will hopefully be a working minimalist text editor that works like Vim. It 
   <h2>Launch</h2>
   <code>javac Woo.java && java Woo [filename]</code>
 
-  </center>
+  </p>
   </body>
 </html>
