@@ -1,7 +1,7 @@
 <html>
   <head></head>
   <body>
-  <center text-align="center">
+  <center align="center">
   <img src="https://user-images.githubusercontent.com/67127399/170313423-6a3eff48-c339-47b3-80f2-5778aafbb511.png" width="250px" height="150px">
 
   <h1>DrBracket</h1>
