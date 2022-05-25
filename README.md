@@ -11,7 +11,7 @@ APCS1
 </pre>
 
   <h2>What is this</h2>
-    Our product is called... <p style="font-size: 200%">Impulse Editor</p>
+    Our product is called... <strong>Impulse Editor</strong>
 This will hopefully be a working minimalist text editor that works like Vim. It displays text on a screen, which you can scroll with up/down arrows, edit, save, load, etc. It also will be able to match brackets with stacks (hence, DrBracket)
 
   <h2>Launch</h2>
