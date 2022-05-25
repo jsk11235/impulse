@@ -4,7 +4,7 @@
   <p align="center">
   <img src="https://user-images.githubusercontent.com/67127399/170313423-6a3eff48-c339-47b3-80f2-5778aafbb511.png" width="250px" height="150px">
 
-  <h1>DrBracket</h1>
+  <h1 align="center">DrBracket</h1>
 <pre>
 DrBracket: William Vongphanith, Ari Gurovich, Jacob Kirmayer
 APCS1
