@@ -46,3 +46,9 @@ William Vongphanith :: Updated repo
 Ari Gurovich :: Provided ideas, mental support
 Jacob Kirmayer :: Provided positive vibes from afar
 ==============================================================
+2022-05-26
+--------------------------------------------------------------
+William Vongphanith :: Updated devlog
+Ari Gurovich :: Amazing ideas
+Jacob Kirmayer :: Accepted repo invite
+==============================================================
