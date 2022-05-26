@@ -1,0 +1,8 @@
+use add
+
+param addend1;
+param addend2;
+param addend3;
+param addend4;
+
+return add(addend1 addend2) + add(addend3 addend4)

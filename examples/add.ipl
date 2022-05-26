@@ -1,0 +1,4 @@
+param addend1;
+param addend2;
+
+return addend1 + addend2
