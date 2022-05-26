@@ -5,4 +5,7 @@ param addend2;
 param addend3;
 param addend4;
 
-return add(addend1 addend2) + add(addend3 addend4)
+var res1 = add(addend1 addend2)
+var res2 = add(addend3 addend4)
+var res = add(res1 res2)
+return res
