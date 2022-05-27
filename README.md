@@ -17,7 +17,8 @@ APCS1
   <h2>Launch</h2>
   <code>javac Woo.java && java Woo [filename].ipl</code>
     <h2>Made with</h2>
-    <img src="https://user-images.githubusercontent.com/67127399/170703678-9548c0fa-6959-444b-ae14-ff4ec195120c.png" width="250px">
+    <img src="https://user-images.githubusercontent.com/67127399/170703678-9548c0fa-6959-444b-ae14-ff4ec195120c.png" width="250px"><img src="https://raw.githubusercontent.com/mkrl/misbrands/456ea8aa2c7873123dce3d746528bb9a3b6dd139/ubuntu.svg" width="250px">`
+
    <br>🤣😂
   </p>
   </body>
