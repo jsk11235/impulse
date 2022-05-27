@@ -31,7 +31,7 @@ public class Procedure {
     }
 
     public double doMath(String math){
-
+        return Double.parseDouble(math);
     }
 
     public double runReturn(String line){
@@ -65,5 +65,7 @@ public class Procedure {
     public static void main(String[] args) throws FileNotFoundException {
         Procedure proc = new Procedure("add");
         System.out.println(proc);
+        double[] blah = {1,2};
+        System.out.println(proc.run(blah));
     }
 }
