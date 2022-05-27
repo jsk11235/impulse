@@ -25,7 +25,6 @@ APCS1
     <img src="https://user-images.githubusercontent.com/3816428/147370865-404b35be-8631-4c1e-9c3e-b1bf65d275fa.png" width="250px">
     <img src="https://raw.githubusercontent.com/mkrl/misbrands/e6d5f2e0655972a84191c0deaaee375b965cc37e/atom.svg" width="250px">
     <img src="https://raw.githubusercontent.com/mkrl/misbrands/c4d8e7becaaa67a7eb354dd7ef8ea4dcdd941ead/python.svg" width="250px">
-    
     and don't forget the 
     <img src="https://raw.githubusercontent.com/mkrl/misbrands/d51a0ad07cd84122a78dbbedf72cc79d31a3454a/vi.svg" width="250px">
    <br>🤣😂
