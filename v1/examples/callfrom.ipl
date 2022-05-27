@@ -1,0 +1,11 @@
+use add
+
+param addend1;
+param addend2;
+param addend3;
+param addend4;
+
+res res1 = add(addend1 addend2)
+res res2 = add(addend3 addend4)
+res res = add(res1 res2)
+return res
