@@ -24,6 +24,7 @@ APCS1
     <img src="https://raw.githubusercontent.com/niklas-englert/misbrands/add-google-search/googlesearch.svg" width="250px">
     <img src="https://user-images.githubusercontent.com/3816428/147370865-404b35be-8631-4c1e-9c3e-b1bf65d275fa.png" width="250px">
     <img src="https://raw.githubusercontent.com/mkrl/misbrands/e6d5f2e0655972a84191c0deaaee375b965cc37e/atom.svg" width="250px">
+    <img src="https://raw.githubusercontent.com/mkrl/misbrands/c4d8e7becaaa67a7eb354dd7ef8ea4dcdd941ead/python.svg" width="250px">
    <br>🤣😂
   </p>
   </body>
