@@ -82,7 +82,6 @@ public class MathParser {
     }
 
     public static void main (String[] args) {
-        // 243.0
         System.out.println(parseMath("12+2*3^4"));
     }
 }
