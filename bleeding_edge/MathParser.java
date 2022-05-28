@@ -4,9 +4,14 @@ public class MathParser {
     private static final char LEFT_PAREN_CHAR = '[';
     private static final char RIGHT_PAREN_CHAR = ']';
 
-    public static double parseMath (String mathString) {
+    public static boolean isOp(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^';
+    }
+
+    public static double parseMath(String mathString) {
         Stack<Double> values = new Stack<Double>();
         Stack<Character> ops = new Stack<Character>();
+        char nextOp = '-';
         for (int i = 0; i < mathString.length(); i++) {
             char c = mathString.charAt(i);
             if (c == ' ') {
@@ -19,11 +24,14 @@ public class MathParser {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
                 ops.pop();
-            } else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^') {
-                while (!ops.empty() && hasPrecedence(c, ops.peek())) {
+            } else if (isOp(c)) {
+                while (!ops.empty() && hasPrecedence(ops.peek(), c)) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
                 ops.push(c);
+//                for (int idx = 0 ;idx<mathString.length();idx++){
+//                    if (isOp(mathString.charAt()))
+//                }
             } else {
                 StringBuilder sb = new StringBuilder();
                 while (i < mathString.length() && (Character.isDigit(mathString.charAt(i)) || mathString.charAt(i) == '.')) {
@@ -46,14 +54,11 @@ public class MathParser {
         if (op2 == LEFT_PAREN_CHAR || op2 == RIGHT_PAREN_CHAR) {
             return false;
         }
-        if (op1 == '^') {
+        if (op1 == '^'||op1 == '*' || op1 == '/') {
             return op2 != '^';
         }
-        if (op1 == '*' || op1 == '/') {
-            return op2 == '^' || op2 == '*' || op2 == '/';
-        }
         if (op1 == '+' || op1 == '-') {
-            return op2 == '^' || op2 == '*' || op2 == '/' || op2 == '+' || op2 == '-';
+            return op2 == '+' || op2 == '-';
         }
         return false;
     }
@@ -65,8 +70,9 @@ public class MathParser {
             case '-':
                 return a - b;
             case '*':
+                return a * b;
             case '/':
-                return (op == '*') ? a * b : a / b;
+                return a / b;
             case '%':
                 return a % b;
             case '^':
@@ -75,7 +81,7 @@ public class MathParser {
         return 0;
     }
 
-    public static void main (String[] args) {
-        System.out.println(parseMath("[1 + 2] * [3 ^ 4]"));
+    public static void main(String[] args) {
+        System.out.println(parseMath("12+2*3^4^0.5"));
     }
 }
