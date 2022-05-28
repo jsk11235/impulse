@@ -52,3 +52,13 @@ William Vongphanith :: Updated devlog
 Ari Gurovich :: Amazing ideas
 Jacob Kirmayer :: Accepted repo invite
 ==============================================================
+2022-05-27
+--------------------------------------------------------------
+William Vongphanith :: Updated devlog
+Ari Gurovich :: Vibes
+Jacob Kirmayer :: Math Parser Mk1
+==============================================================
+2022-05-28
+--------------------------------------------------------------
+William Vongphanith :: Math Parser Mk2
+==============================================================
