@@ -1,0 +1,3 @@
+use callfrom
+
+return callfrom(2 5 7 123)

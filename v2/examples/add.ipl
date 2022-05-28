@@ -1,0 +1,6 @@
+param addend1
+param addend2
+
+res stuff = factorial: addend1,addend2
+
+return stuff
