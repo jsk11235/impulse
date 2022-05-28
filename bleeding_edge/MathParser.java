@@ -47,13 +47,13 @@ public class MathParser {
             return false;
         }
         if (op1 == '^') {
-            return op2 != '^';
+            return op2 == '*' || op2 == '/' || op2 == '+' || op2 == '-' || op2 == '%';
         }
         if (op1 == '*' || op1 == '/') {
-            return op2 == '^' || op2 == '*' || op2 == '/';
+            return op2 == '+' || op2 == '-' || op2 == '%';
         }
         if (op1 == '+' || op1 == '-') {
-            return op2 == '^' || op2 == '*' || op2 == '/' || op2 == '+' || op2 == '-';
+            return op2 == '%';
         }
         return false;
     }
@@ -77,6 +77,6 @@ public class MathParser {
 
     public static void main (String[] args) {
         // 243.0
-        System.out.println(parseMath("[1 + 2] * [3 ^ 4]"));
+        System.out.println(parseMath("12+2*3^4"));
     }
 }

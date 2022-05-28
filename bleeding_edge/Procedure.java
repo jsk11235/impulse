@@ -57,6 +57,6 @@ public class Procedure {
     }
 
     public void run () {
-        Object res = ProcedureEvaluator.eval(body, args, vars);
+        ProcedureEvaluator.eval(body, args, vars);
     }
 }
