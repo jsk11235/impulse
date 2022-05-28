@@ -30,16 +30,19 @@ public class Procedure {
                 '}';
     }
 
-    public double doMath(String math){
+    public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
-	for (int i = 0; i < vars.size(); i++) 
-	    newMath = newMath.replaceAll(keys.get(i), Double.toString(vars.get(i)));
-	return MathUtils.eval(newMath);
+        for (int i = 0; i < vars.size(); i++)
+            newMath = newMath.replaceAll(keys.get(i), Double.toString(vars.get(i)));
+        try{
+            return Double.parseDouble(math);
+        }catch (Exception e){}
+        return MathUtils.eval(newMath);
     }
 
-    public double runReturn(String line){
+    public double runReturn(String line) {
         String ref = line.substring(6);
-        for (int i = 0;i<keys.size();i++){
+        for (int i = 0; i < keys.size(); i++) {
             if (ref.equals(keys.get(i)))
                 return vars.get(i);
         }
@@ -50,6 +53,18 @@ public class Procedure {
         String name = line.substring(5);
         keys.add(name);
         vars.add(value);
+    }
+
+    public void runVar(String line){
+        int equalsIdx = line.indexOf("=");
+        String name = line.substring(4,equalsIdx);
+        String ref = line.substring(equalsIdx+1);
+        if (keys.contains(name))
+            System.out.println("Variable already declared");
+        else{
+            keys.add(name);
+            vars.add(doMath(ref));
+        }
     }
 
     public double run(double[] params) {
@@ -66,9 +81,17 @@ public class Procedure {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        Procedure proc = new Procedure("add");
-        System.out.println(proc);
-        double[] blah = {1,2};
-        System.out.println(proc.run(blah));
+        double[] params = new double[args.length - 1];
+        int argNum = 0;
+        String procName = "";
+        for (String arg : args) {
+            if (argNum == 0)
+                procName = arg;
+            else
+                params[argNum - 1] = Double.parseDouble(arg);
+            argNum++;
+        }
+        Procedure proc = new Procedure(procName);
+        System.out.println(proc.run(params));
     }
 }
