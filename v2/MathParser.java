@@ -31,11 +31,13 @@ public class MathParser {
                 ops.push(c);
             } else {
                 StringBuilder sb = new StringBuilder();
-                while (i < mathString.length() && (Character.isDigit(mathString.charAt(i)) || mathString.charAt(i) == '.')) {
+                while (i < mathString.length() && (Character.isDigit(mathString.charAt(i)) || mathString.charAt(i) == '.'||
+                        mathString.charAt(i)=='E')) {
                     sb.append(mathString.charAt(i));
                     i++;
                 }
                 i--;
+                System.out.println(mathString);
                 values.push(Double.parseDouble(sb.toString()));
             }
         }
@@ -79,6 +81,6 @@ public class MathParser {
     }
 
     public static void main (String[] args) {
-        System.out.println(parseMath("12+2*3^4"));
+        System.out.println(parseMath("12.0-1"));
     }
 }
