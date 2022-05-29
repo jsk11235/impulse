@@ -16,18 +16,6 @@ APCS1
     It is a novel performant programming language that is based on procedures and files. 
   <h2>Launch</h2>
   <code>javac Woo.java && java Woo [filename].ipl</code>
-    <h2>Made with</h2>
-    <img src="https://user-images.githubusercontent.com/67127399/170703678-9548c0fa-6959-444b-ae14-ff4ec195120c.png" width="250px" style="float:left"><img src="https://raw.githubusercontent.com/mkrl/misbrands/456ea8aa2c7873123dce3d746528bb9a3b6dd139/ubuntu.svg" width="250px" style="float:left"><img src="https://raw.githubusercontent.com/mkrl/misbrands/456ea8aa2c7873123dce3d746528bb9a3b6dd139/github.svg" width="250px"><img src="https://raw.githubusercontent.com/mkrl/misbrands/9117cd20fda162c60cc245951e4f5731d10722b9/Microsoft%20teams.svg" width="250px">
-    <img src="https://raw.githubusercontent.com/jogerj/misbrands/master/azure.svg" width="250px">
-    <img src="https://raw.githubusercontent.com/mkrl/misbrands/1b8f83b5416f2276e57d7beaee36db6b70496e50/discord.svg" width="250px">
-<img src="https://raw.githubusercontent.com/niklas-englert/misbrands/add-stack-overflow/stackoverflow.svg" width="250px">
-    <img src="https://raw.githubusercontent.com/niklas-englert/misbrands/add-google-search/googlesearch.svg" width="250px">
-    <img src="https://user-images.githubusercontent.com/3816428/147370865-404b35be-8631-4c1e-9c3e-b1bf65d275fa.png" width="250px">
-    <img src="https://raw.githubusercontent.com/mkrl/misbrands/e6d5f2e0655972a84191c0deaaee375b965cc37e/atom.svg" width="250px">
-    <img src="https://raw.githubusercontent.com/mkrl/misbrands/c4d8e7becaaa67a7eb354dd7ef8ea4dcdd941ead/python.svg" width="250px">
-    and don't forget the 
-    <img src="https://raw.githubusercontent.com/mkrl/misbrands/d51a0ad07cd84122a78dbbedf72cc79d31a3454a/vi.svg" width="250px">
-   <br>🤣😂
   </p>
   </body>
 </html>
