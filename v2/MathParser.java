@@ -37,7 +37,6 @@ public class MathParser {
                     i++;
                 }
                 i--;
-                System.out.println(mathString);
                 values.push(Double.parseDouble(sb.toString()));
             }
         }
