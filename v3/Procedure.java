@@ -7,12 +7,13 @@ public class Procedure {
     ArrayList<Double> vars;
     ArrayList<String> keys;
     ArrayList<String> src;
+    int lineNum = 0;
 
     public Procedure(String name) throws FileNotFoundException {
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File("./examples/" + name + ".ipl");
+        File srcFile = new File("./" + name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
@@ -96,10 +97,14 @@ public class Procedure {
     public double run(double[] params) throws FileNotFoundException {
         int paramNum = 0;
         boolean runnable = true;
+        int ifs = 0;
         for (String line : src) {
+          try{
             if (line.equals("over")) {
+              if (ifs ==0){
                 runnable = true;
                 continue;
+              } else {ifs--;}
             }
             if (runnable) {
                 if (line.startsWith("return")) {
@@ -115,7 +120,17 @@ public class Procedure {
                     if (!runIf(line))
                         runnable = false;
                 }
+            } else {
+              if (line.startsWith("if")){
+                ifs++;
+              }
             }
+
+          } catch (Exception e){
+            System.out.println("Error on line "+ lineNum + "");
+            break;
+        }
+          lineNum++;
         }
         return 0;
     }
@@ -127,8 +142,13 @@ public class Procedure {
         for (String arg : args) {
             if (argNum == 0)
                 procName = arg;
-            else
+            else{
+              try{
                 params[argNum - 1] = Double.parseDouble(arg);
+              } catch (Exception e){
+                System.out.println("Missing parameter for " +procName);
+              }
+              }
             argNum++;
         }
         Procedure proc = new Procedure(procName);
