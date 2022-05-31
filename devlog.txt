@@ -62,3 +62,8 @@ Jacob Kirmayer :: Math Parser Mk1
 --------------------------------------------------------------
 William Vongphanith :: Math Parser Mk2
 ==============================================================
+2022-05-29
+--------------------------------------------------------------
+Jacob Kirmayer :: Math Parser Mk3, Boolean Parser and Conditionals
+William Vongphanith :: Talking
+==============================================================
