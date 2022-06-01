@@ -16,7 +16,7 @@ public class Procedure {
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File(name + ".ipl");
+        File srcFile = new File("./"+name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
@@ -162,6 +162,8 @@ public class Procedure {
                         runRes(line);
                     } else if (line.startsWith("if")) {
                         if (!runIf(line)) runnable = false;
+                    } else {
+                      new ImpulseError("CompileError", "Syntax unintelligble", lineNum, -1, this.fileName).exit();
                     }
                 } else {
                     if (line.startsWith("if")) {
@@ -172,6 +174,7 @@ public class Procedure {
                 new ImpulseError("RunError", "Something unexpected happened while running the procedure.", -1, -1, this.fileName).exit();
             }
         }
+        new ImpulseError("RunError", "No Return Value", -1, -1, this.fileName).exit();
         return 0;
     }
 }
