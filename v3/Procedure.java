@@ -142,7 +142,7 @@ public class Procedure {
                             runParam(line, params[paramNum]);
                             paramNum++;
                         } catch (Exception e) {
-                            new ImpulseError("ParamError", "Param statement was not given a value, or something unexpected happened.", lineNum, colNum, this.fileName).exit();
+                            new ImpulseError("ParamError", "I was looking for " + (paramNum + 1) + (paramNum + 1 == 1 ? " parameter" : " parameters") + ", but only " + params.length + (params.length == 1 ? " parameter" : " parameters") + (params.length == 1 ? " was" : " were") + " given.", lineNum, colNum, this.fileName).exit();
                         }
                     } else if (line.startsWith("var")) {
                         colNum += 3;
