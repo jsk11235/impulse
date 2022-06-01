@@ -65,3 +65,8 @@ William Vongphanith :: Math Parser Mk2
 Jacob Kirmayer :: Math Parser Mk3, Boolean Parser and Conditionals
 William Vongphanith :: Talking
 ==============================================================
+2022-05-31
+--------------------------------------------------------------
+William Vongphanith :: Error handling, Code cleanup, .gitignore
+Jacob Kirmayer :: Work on error handling
+==============================================================

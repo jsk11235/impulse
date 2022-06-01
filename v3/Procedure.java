@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Procedure {
+    String fileName;
     ArrayList<Double> vars;
     ArrayList<String> keys;
     ArrayList<String> src;
     int lineNum = 0;
+    int colNum = 0;
 
     public Procedure(String name) throws FileNotFoundException {
+        fileName = name;
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
@@ -17,35 +20,50 @@ public class Procedure {
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
-            if (data.length() > 0)
-                src.add(data);
+            if (data.length() > 0) src.add(data);
         }
         reader.close();
     }
 
+    public static void main(String[] args) throws FileNotFoundException {
+        double[] params = new double[args.length - 1];
+        int argNum = 0;
+        String procName = "";
+        for (String arg : args) {
+            if (argNum == 0) procName = arg;
+            else {
+                try {
+                    params[argNum - 1] = Double.parseDouble(arg);
+                } catch (Exception e) {
+                    new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, "").exit();
+                }
+            }
+            argNum++;
+        }
+        Procedure proc = new Procedure(procName);
+        proc.run(params);
+        System.out.println(proc.run(params));
+    }
+
     public String toString() {
-        return "Procedure{" +
-                "vars=" + vars +
-                ", keys=" + keys +
-                ", src=" + src +
-                '}';
+        return "Procedure{" + "vars=" + vars + ", keys=" + keys + ", src=" + src + '}';
     }
 
     public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
         for (int i = 0; i < vars.size(); i++)
             newMath = newMath.replaceAll(keys.get(i), Double.toString(vars.get(i)));
-        try{
+        try {
             return Double.parseDouble(math);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         return MathParser.parseMath(newMath);
     }
 
     public double runReturn(String line) {
         String ref = line.substring(6);
         for (int i = 0; i < keys.size(); i++) {
-            if (ref.equals(keys.get(i)))
-                return vars.get(i);
+            if (ref.equals(keys.get(i))) return vars.get(i);
         }
         return doMath(ref);
     }
@@ -56,19 +74,18 @@ public class Procedure {
         vars.add(value);
     }
 
-    public void runVar(String line){
+    public void runVar(String line) {
         int equalsIdx = line.indexOf("=");
-        String name = line.substring(3,equalsIdx);
-        String ref = line.substring(equalsIdx+1);
-        if (keys.contains(name))
-            System.out.println("Variable already declared");
-        else{
+        String name = line.substring(3, equalsIdx);
+        String ref = line.substring(equalsIdx + 1);
+        if (keys.contains(name)) System.out.println("Variable already declared");
+        else {
             keys.add(name);
             vars.add(doMath(ref));
         }
     }
 
-    public boolean runIf(String line){
+    public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
             ref = ref.replaceAll(keys.get(i), Double.toString(vars.get(i)));
@@ -80,12 +97,12 @@ public class Procedure {
             line = line.replaceAll(keys.get(i), Double.toString(vars.get(i)));
         int equalsIdx = line.indexOf("=");
         int colonIdx = line.indexOf(":");
-        String varName = line.substring(3,equalsIdx);
-        String procName = line.substring(equalsIdx+1,colonIdx);
-        String[] strungParams = line.substring(colonIdx+1).split(",");
+        String varName = line.substring(3, equalsIdx);
+        String procName = line.substring(equalsIdx + 1, colonIdx);
+        String[] strungParams = line.substring(colonIdx + 1).split(",");
         double[] newParams = new double[strungParams.length];
         int idx = 0;
-        for (String s:strungParams){
+        for (String s : strungParams) {
             newParams[idx] = doMath(s);
             idx++;
         }
@@ -99,60 +116,52 @@ public class Procedure {
         boolean runnable = true;
         int ifs = 0;
         for (String line : src) {
-          try{
-            if (line.equals("over")) {
-              if (ifs ==0){
-                runnable = true;
-                continue;
-              } else {ifs--;}
-            }
-            if (runnable) {
-                if (line.startsWith("return")) {
-                    return runReturn(line);
-                } else if (line.startsWith("param")) {
-                    runParam(line, params[paramNum]);
-                    paramNum++;
-                } else if (line.startsWith("var")) {
-                    runVar(line);
-                } else if (line.startsWith("res")) {
-                    runRes(line);
-                } else if (line.startsWith("if")) {
-                    if (!runIf(line))
-                        runnable = false;
+            try {
+                // We are starting lineNum at 0 but line numbers actually start at 1
+                lineNum++;
+                colNum = 0;
+                if (line.equals("over")) {
+                    if (ifs == 0) {
+                        runnable = true;
+                        continue;
+                    } else {
+                        ifs--;
+                    }
                 }
-            } else {
-              if (line.startsWith("if")){
-                ifs++;
-              }
+                if (runnable) {
+                    if (line.startsWith("return")) {
+                        colNum += 6;
+                        try {
+                            return runReturn(line);
+                        } catch (Exception e) {
+                            new ImpulseError("ReturnError", "Return statement was not given a value, or something unexpected happened.", lineNum, colNum, this.fileName).exit();
+                        }
+                    } else if (line.startsWith("param")) {
+                        colNum += 5;
+                        try {
+                            runParam(line, params[paramNum]);
+                            paramNum++;
+                        } catch (Exception e) {
+                            new ImpulseError("ParamError", "Param statement was not given a value, or something unexpected happened.", lineNum, colNum, this.fileName).exit();
+                        }
+                    } else if (line.startsWith("var")) {
+                        colNum += 3;
+                        runVar(line);
+                    } else if (line.startsWith("res")) {
+                        colNum += 3;
+                        runRes(line);
+                    } else if (line.startsWith("if")) {
+                        if (!runIf(line)) runnable = false;
+                    }
+                } else {
+                    if (line.startsWith("if")) {
+                        ifs++;
+                    }
+                }
+            } catch (Exception e) {
+                new ImpulseError("RunError", "Something unexpected happened while running the procedure.", -1, -1, this.fileName).exit();
             }
-
-          } catch (Exception e){
-            System.out.println("Error on line "+ lineNum + "");
-            break;
-        }
-          lineNum++;
         }
         return 0;
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-        double[] params = new double[args.length - 1];
-        int argNum = 0;
-        String procName = "";
-        for (String arg : args) {
-            if (argNum == 0)
-                procName = arg;
-            else{
-              try{
-                params[argNum - 1] = Double.parseDouble(arg);
-              } catch (Exception e){
-                System.out.println("Missing parameter for " +procName);
-              }
-              }
-            argNum++;
-        }
-        Procedure proc = new Procedure(procName);
-        proc.run(params);
-        System.out.println(proc.run(params));
     }
 }

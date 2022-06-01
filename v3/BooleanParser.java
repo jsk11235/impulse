@@ -5,12 +5,11 @@ public class BooleanParser {
     private static final char RIGHT_PAREN_CHAR = ']';
 
     public static boolean isOp(char c) {
-        return c == '|' || c == '&' || c == '=' || c == '>' || c == '<' ||c=='['||c==']';
+        return c == '|' || c == '&' || c == '=' || c == '>' || c == '<' || c == '[' || c == ']';
     }
 
     public static boolean parseBool(String boolString) {
-        if (boolString.equals("true")||boolString.equals("false"))
-            return Boolean.parseBoolean(boolString);
+        if (boolString.equals("true") || boolString.equals("false")) return Boolean.parseBoolean(boolString);
         Stack<String> values = new Stack<String>();
         Stack<Character> ops = new Stack<Character>();
         for (int i = 0; i < boolString.length(); i++) {
@@ -55,12 +54,11 @@ public class BooleanParser {
     }
 
     public static boolean applyOp(char op, String b, String a) {
-        if (a.equals("true")||a.equals("false"))
-            return applyOp(op,Boolean.parseBoolean(b),Boolean.parseBoolean(a));
-        else
-            return applyOp(op,Double.parseDouble(b),Double.parseDouble(a));
+        if (a.equals("true") || a.equals("false")) return applyOp(op, Boolean.parseBoolean(b), Boolean.parseBoolean(a));
+        else return applyOp(op, Double.parseDouble(b), Double.parseDouble(a));
     }
 
+    // But what if we wanted to do bitwise operations?
     public static boolean applyOp(char op, boolean b, boolean a) {
         switch (op) {
             case '|':
@@ -83,7 +81,7 @@ public class BooleanParser {
         return false;
     }
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         System.out.println(parseBool("5<4|5=4"));
     }
 }

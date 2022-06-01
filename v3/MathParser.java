@@ -31,8 +31,7 @@ public class MathParser {
                 ops.push(c);
             } else {
                 StringBuilder sb = new StringBuilder();
-                while (i < mathString.length() && (Character.isDigit(mathString.charAt(i)) || mathString.charAt(i) == '.'||
-                        mathString.charAt(i)=='E')) {
+                while (i < mathString.length() && (Character.isDigit(mathString.charAt(i)) || mathString.charAt(i) == '.' || mathString.charAt(i) == 'E')) {
                     sb.append(mathString.charAt(i));
                     i++;
                 }
@@ -52,7 +51,7 @@ public class MathParser {
         if (op2 == LEFT_PAREN_CHAR || op2 == RIGHT_PAREN_CHAR) {
             return false;
         }
-        if (op1 == '^'||op1 == '*' || op1 == '/') {
+        if (op1 == '^' || op1 == '*' || op1 == '/') {
             return op2 != '^';
         }
         if (op1 == '+' || op1 == '-') {
@@ -77,9 +76,5 @@ public class MathParser {
                 return Math.pow(a, b);
         }
         return 0;
-    }
-
-    public static void main (String[] args) {
-        System.out.println(parseMath("12.0-1"));
     }
 }
