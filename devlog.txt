@@ -67,6 +67,6 @@ William Vongphanith :: Talking
 ==============================================================
 2022-05-31
 --------------------------------------------------------------
-William Vongphanith :: Error handling, Code cleanup, .gitignore
+William Vongphanith :: Error handling, Code cleanup, .gitignore, and more
 Jacob Kirmayer :: Work on error handling
 ==============================================================
