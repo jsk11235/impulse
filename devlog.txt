@@ -70,3 +70,8 @@ William Vongphanith :: Talking
 William Vongphanith :: Error handling, Code cleanup, .gitignore, and more
 Jacob Kirmayer :: Work on error handling
 ==============================================================
+2022-06-01
+--------------------------------------------------------------
+William Vongphanith :: Cleaned code and error handling
+Ari Gurovich :: Wrote test code and improved parsers and error handling
+Jacob Kirmayer :: Work on error handling
