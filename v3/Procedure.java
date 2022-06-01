@@ -16,7 +16,7 @@ public class Procedure {
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File("./" + name + ".ipl");
+        File srcFile = new File(name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
@@ -26,7 +26,12 @@ public class Procedure {
     }
 
     public static void main(String[] args) throws FileNotFoundException {
-        double[] params = new double[args.length - 1];
+        double[] params = null;
+        try {
+            params = new double[args.length - 1];
+        } catch (Exception e) {
+            new ImpulseError("NoFile", "You must provide a file to run.", -1, -1, null).exit();
+        }
         int argNum = 0;
         String procName = "";
         for (String arg : args) {
@@ -35,12 +40,17 @@ public class Procedure {
                 try {
                     params[argNum - 1] = Double.parseDouble(arg);
                 } catch (Exception e) {
-                    new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, "").exit();
+                    new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, procName).exit();
                 }
             }
             argNum++;
         }
-        Procedure proc = new Procedure(procName);
+        Procedure proc = null;
+        try {
+            proc = new Procedure(procName);
+        } catch (FileNotFoundException e) {
+            new ImpulseError("FileNotFound", "The file " + procName + ".ipl was not found.", -1, -1, null).exit();
+        }
         proc.run(params);
         System.out.println(proc.run(params));
     }

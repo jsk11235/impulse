@@ -21,21 +21,17 @@ public class ImpulseError {
     }
 
     public void exit() {
-        if (this.lineNumber == -1 || this.columnNumber == -1) {
-            System.out.println(
-                    "Impulse had an error: " +
-                            "\n\t" + errorType + ": " + message +
-                            "\n\t" + "in file " + fileName + ".ipl"
-            );
-            System.exit(errorCode);
-        } else {
-            System.out.println(
-                    "Impulse had an error: " +
-                            "\n\t" + errorType + ": " + message +
-                            "\n\t" + "at line " + lineNumber + ":" + columnNumber +
-                            "\n\t" + "in file " + fileName + ".ipl"
-            );
-            System.exit(errorCode);
+        String errorString = "Impulse ran into an error while executing your program.\n";
+        if (this.errorType != null) {
+            errorString += "\t" + this.errorType;
         }
+        if (this.message != null) {
+            errorString += ": " + this.message;
+        }
+        if (this.fileName != null) {
+            errorString += "\n\t(" + this.fileName.split("/")[this.fileName.split("/").length - 1] + ".ipl" + (this.lineNumber != -1 ? ":" + this.lineNumber : "") /* + (this.columnNumber != -1 ? ":" + this.columnNumber : "") */ + ")";
+        }
+        System.out.println(errorString);
+        System.exit(this.errorCode);
     }
 }
