@@ -45,3 +45,17 @@ ehthumbs.db
 # Filenames with special characters
 **/*[\\/\:;*?!'"<>|$º•¶§∞¢£]*
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# BOSS XTRAS v2
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Replit files #
+.replit
+replit.nix
+
+# IDE files #
+.idea
+.idea/**/*
+.vscode
+.vscode/**/*
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
