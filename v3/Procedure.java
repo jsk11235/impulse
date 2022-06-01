@@ -95,6 +95,11 @@ public class Procedure {
         }
     }
 
+    public void runPrint(String line) {
+        String name = line.substring(5);
+        System.out.println(name);
+    }
+
     public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
@@ -154,6 +159,9 @@ public class Procedure {
                         } catch (Exception e) {
                             new ImpulseError("ParamError", "I was looking for " + (paramNum + 1) + (paramNum + 1 == 1 ? " parameter" : " parameters") + ", but only " + params.length + (params.length == 1 ? " parameter" : " parameters") + (params.length == 1 ? " was" : " were") + " given.", lineNum, colNum, this.fileName).exit();
                         }
+                    } else if (line.startsWith("print")){
+                        colNum += 5;
+                        runPrint(line);
                     } else if (line.startsWith("var")) {
                         colNum += 3;
                         runVar(line);
