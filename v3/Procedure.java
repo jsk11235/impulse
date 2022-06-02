@@ -25,6 +25,21 @@ public class Procedure {
         reader.close();
     }
 
+    public String allRemainders(double x,int prec){
+      String ret = "";
+      for (int i = 0; i<prec;i++){
+        
+      }
+    }
+
+    public String dts(double x,int prec){
+      String ret = "";
+      if (x<0){return "-"+dts(-1*x);}
+      int log = (int) Math.log(10,x);
+
+    }
+
+
     public static void main(String[] args) throws FileNotFoundException {
         double[] params = null;
         try {
@@ -96,8 +111,13 @@ public class Procedure {
     }
 
     public void runPrint(String line) {
-        String name = line.substring(5);
-        System.out.println(name);
+        String ref = line.substring(5);
+        System.out.println(doMath(ref));
+    }
+
+    public void runDisplay(String line) {
+        String ref = line.substring(7);
+        System.out.println(ref);
     }
 
     public boolean runIf(String line) {
@@ -162,7 +182,10 @@ public class Procedure {
                     } else if (line.startsWith("print")){
                         colNum += 5;
                         runPrint(line);
-                    } else if (line.startsWith("var")) {
+                    } else if (line.startsWith("display")){
+                        colNum += 7;
+                        runDisplay(line);
+                    }else if (line.startsWith("var")) {
                         colNum += 3;
                         runVar(line);
                     } else if (line.startsWith("res")) {
@@ -170,7 +193,7 @@ public class Procedure {
                         runRes(line);
                     } else if (line.startsWith("if")) {
                         if (!runIf(line)) runnable = false;
-                    } else {
+                    } else if (!line.equals("over")){
                       new ImpulseError("CompileError", "Syntax unintelligble", lineNum, -1, this.fileName).exit();
                     }
                 } else {
