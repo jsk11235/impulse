@@ -16,19 +16,19 @@ over
 ### Boolean Operators
 
 Impulse uses the following boolean operators:
-- > (greater than)
-- < (less than)
-- = (equal too)
+- operator ">" for greater than
+- operator "<" for less than
+- operator "=" for equal to
 
 ### Arithmetic Operators
 
 Impulse uses the following arithmetic operators:
-- + (addition)
-- - (subtraction)
-- * (multiplication)
-- / (division)
-- % (mod)
-- ^ (exponent)
+- operator "+" for addition
+- operator "-" for subtraction
+- operator "*" for multiplication
+- operator "/" for division
+- operator "%" for mod
+- operator "^" for exponent
 
 ### Running Files
 
