@@ -2,7 +2,7 @@
 
 ## General Syntax
 
-### Variable Declaration
+### Parameter Declaration
 
 param [variable]   
 e.x. param x declares variable x 
@@ -12,3 +12,9 @@ e.x. param x declares variable x
 if [boolean statement]  
 [executable code]  
 over
+
+### Running File
+
+While running files, one must run the file followed by inputs for each parameter the file takes in.  
+If an impulse file name Code takes in two params, one would run it using the following example statement:  
+java Procedure Code.ipl 17 4  
