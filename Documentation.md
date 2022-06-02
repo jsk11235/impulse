@@ -4,11 +4,11 @@
 
 ### Variable Declaration
 
-param <variable> 
+param [variable] \n 
 e.x. param x declares variable x 
 
 ### If Statements
 
-if <boolean statement>
-<executable code>
+if [boolean statement] \n
+[executable code] \n
 over
