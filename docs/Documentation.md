@@ -4,14 +4,18 @@
 
 ### Parameter Declaration
 
+```
 param [variable]   
+```
 e.x. param x declares variable x 
 
 ### If Statements
 
+```
 if [boolean statement]  
-[executable code]  
+  [executable code]  
 over
+```
 
 ```ipl
 param n
@@ -26,9 +30,9 @@ over
 ### Boolean Operators
 
 Impulse uses the following boolean operators:
-- operator ">" for greater than
-- operator "<" for less than
-- operator "=" for equal to
+- operator `>` for greater than
+- operator `<` for less than
+- operator `=` for equal to
 
 ```ipl
 param n
@@ -44,12 +48,12 @@ over
 ### Arithmetic Operators
 
 Impulse uses the following arithmetic operators:
-- operator "+" for addition
-- operator "-" for subtraction
-- operator "*" for multiplication
-- operator "/" for division
-- operator "%" for mod
-- operator "^" for exponent
+- operator `+` for addition
+- operator `-` for subtraction
+- operator `*` for multiplication
+- operator `/` for division
+- operator `%` for mod
+- operator `^` for exponent
 
     
 ```ipl
