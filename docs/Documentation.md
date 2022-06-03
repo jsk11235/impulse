@@ -81,3 +81,12 @@ $ alias impulse="java Procedure"
 ```bash
 $ impulse Code 17 4
 ```
+
+### `.iplrc`
+
+This file is used to store user preferences.  It is located in the same directory as the user's home directory.
+For example, you can configure decimal precision to be 2 by adding the following line to your `.iplrc` file:
+
+```bash
+decimal_precision 2
+```
