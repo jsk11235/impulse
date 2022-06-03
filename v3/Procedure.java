@@ -16,7 +16,7 @@ public class Procedure {
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File("./"+name + ".ipl");
+        File srcFile = new File("../examples/"+name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
@@ -25,18 +25,18 @@ public class Procedure {
         reader.close();
     }
 
-    public String allRemainders(double x,int prec){
-      String ret = "";
-      for (int i = 0; i<prec;i++){
-        
-      }
+    public static String digitsOf(double x,int prec){
+      if (prec==0){return "";}
+      int floor = (int) x;
+      return Integer.toString(floor)+digitsOf(10*(x-floor),prec-1);
     }
 
-    public String dts(double x,int prec){
+    public static String dts(double x,int prec){
       String ret = "";
-      if (x<0){return "-"+dts(-1*x);}
-      int log = (int) Math.log(10,x);
-
+      if (x<0){return "[0-"+dts(-1*x,prec)+"]";}
+      int log = (int) Math.log10(x);
+      String digits = digitsOf(x*Math.pow(10,-log),prec);
+      return digits.substring(0,1)+"."+digits.substring(1)+"E"+log;
     }
 
 
@@ -67,7 +67,6 @@ public class Procedure {
             new ImpulseError("FileNotFound", "The file " + procName + ".ipl was not found.", -1, -1, null).exit();
         }
         proc.run(params);
-        System.out.println(proc.run(params));
     }
 
     public String toString() {
@@ -77,7 +76,7 @@ public class Procedure {
     public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
         for (int i = 0; i < vars.size(); i++)
-            newMath = newMath.replaceAll(keys.get(i), Double.toString(vars.get(i)));
+            newMath = newMath.replaceAll(keys.get(i), dts(vars.get(i),10));
         try {
             return Double.parseDouble(math);
         } catch (Exception e) {
@@ -112,7 +111,7 @@ public class Procedure {
 
     public void runPrint(String line) {
         String ref = line.substring(5);
-        System.out.println(doMath(ref));
+        System.out.println(dts(doMath(ref),10));
     }
 
     public void runDisplay(String line) {
@@ -123,13 +122,13 @@ public class Procedure {
     public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
-            ref = ref.replaceAll(keys.get(i), Double.toString(vars.get(i)));
+            ref = ref.replaceAll(keys.get(i), dts(vars.get(i),10));
         return BooleanParser.parseBool(ref);
     }
 
     public void runRes(String line) throws FileNotFoundException {
         for (int i = 0; i < vars.size(); i++)
-            line = line.replaceAll(keys.get(i), Double.toString(vars.get(i)));
+            line = line.replaceAll(keys.get(i), dts(vars.get(i),10));
         int equalsIdx = line.indexOf("=");
         int colonIdx = line.indexOf(":");
         String varName = line.substring(3, equalsIdx);
