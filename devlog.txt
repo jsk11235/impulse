@@ -80,3 +80,7 @@ Jacob Kirmayer :: Work on error handling
 --------------------------------------------------------------
 Ari Gurovich :: Writing documentation
 Jacob Kirmayer :: Worked on print statements 
+==============================================================
+2022-06-04
+--------------------------------------------------------------
+Jacob Kirmayer :: Got negative numbers to work in the math parser, created iplrc
