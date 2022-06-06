@@ -11,7 +11,7 @@ public class MathParser {
     public static double parseMath(String mathString) {
         Stack<Double> values = new Stack<Double>();
         Stack<Character> ops = new Stack<Character>();
-        char nextOp = '-';
+        boolean justHadOp = true;
         for (int i = 0; i < mathString.length(); i++) {
             char c = mathString.charAt(i);
             if (c == ' ') {
@@ -19,24 +19,29 @@ public class MathParser {
             }
             if (c == LEFT_PAREN_CHAR) {
                 ops.push(c);
+                justHadOp = true;
             } else if (c == RIGHT_PAREN_CHAR) {
                 while (ops.peek() != LEFT_PAREN_CHAR) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
                 ops.pop();
-            } else if (isOp(c)) {
+            } else if (isOp(c)&&!justHadOp) {
                 while (!ops.empty() && hasPrecedence(ops.peek(), c)) {
                     values.push(applyOp(ops.pop(), values.pop(), values.pop()));
                 }
                 ops.push(c);
+                justHadOp = true;
             } else {
                 StringBuilder sb = new StringBuilder();
+                sb.append(mathString.charAt(i));
+                i++;
                 while (i < mathString.length() && (Character.isDigit(mathString.charAt(i)) || mathString.charAt(i) == '.' || mathString.charAt(i) == 'E')) {
                     sb.append(mathString.charAt(i));
                     i++;
                 }
                 i--;
                 values.push(Double.parseDouble(sb.toString()));
+                justHadOp = false;
             }
         }
         while (!ops.empty()) {
@@ -77,4 +82,4 @@ public class MathParser {
         }
         return 0;
     }
-}tyh
+}
