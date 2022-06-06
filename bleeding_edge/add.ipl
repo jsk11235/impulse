@@ -1,5 +1,0 @@
-param addend1
-param addend2
-
-number res = add: addend1, addend2
-return res

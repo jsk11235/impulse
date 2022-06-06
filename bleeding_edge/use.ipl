@@ -1,4 +1,0 @@
-use add
-
-number res = add: 1, 2
-print: res
