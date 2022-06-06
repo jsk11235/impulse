@@ -25,7 +25,8 @@ public class Procedure {
         }
         reader.close();
         try {
-            File iplrc = new File("/Users/jsk11235/iplrc");
+            String home = System.getProperty("user.home");
+            File iplrc = new File(home+"/.iplrc");
             Scanner prefs = new Scanner(iplrc);
             while (prefs.hasNextLine()) {
                 String data = StringUtils.removeSpaces(prefs.nextLine());
