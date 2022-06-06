@@ -10,33 +10,50 @@ public class Procedure {
     ArrayList<String> src;
     int lineNum = 0;
     int colNum = 0;
+    int prec = 10;
 
     public Procedure(String name) throws FileNotFoundException {
         fileName = name;
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File("./"+name + ".ipl");
+        File srcFile = new File("./examples/" + name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
             if (data.length() > 0) src.add(data);
         }
         reader.close();
+        try {
+            File iplrc = new File("/Users/jsk11235/iplrc");
+            Scanner prefs = new Scanner(iplrc);
+            while (prefs.hasNextLine()) {
+                String data = StringUtils.removeSpaces(prefs.nextLine());
+                if (data.length() > 0) {
+                    if (data.startsWith("precision")) {
+                        prec = Integer.parseInt(data.substring(9));
+                    }
+                }
+            }
+            prefs.close();
+        } catch(Exception e){System.out.println(e);}
     }
 
-    public String allRemainders(double x,int prec){
-      String ret = "";
-      for (int i = 0; i<prec;i++){
-        
-      }
+    public static String digitsOf(double x, int prec) {
+        if (prec == 0) {
+            return "";
+        }
+        int floor = (int) x;
+        return floor + digitsOf(10 * (x - floor), prec - 1);
     }
 
-    public String dts(double x,int prec){
-      String ret = "";
-      if (x<0){return "-"+dts(-1*x);}
-      int log = (int) Math.log(10,x);
-
+    public static String dts(double x, int prec) {
+        if (x < 0) {
+            return "-" + dts(-1 * x, prec);
+        }
+        int log = (int) Math.log10(x);
+        String digits = digitsOf(x * Math.pow(10, -log), prec);
+        return digits.substring(0, 1) + "." + digits.substring(1) + "E" + log;
     }
 
 
@@ -67,7 +84,6 @@ public class Procedure {
             new ImpulseError("FileNotFound", "The file " + procName + ".ipl was not found.", -1, -1, null).exit();
         }
         proc.run(params);
-        System.out.println(proc.run(params));
     }
 
     public String toString() {
@@ -77,7 +93,7 @@ public class Procedure {
     public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
         for (int i = 0; i < vars.size(); i++)
-            newMath = newMath.replaceAll(keys.get(i), Double.toString(vars.get(i)));
+            newMath = newMath.replaceAll(keys.get(i), dts(vars.get(i), prec));
         try {
             return Double.parseDouble(math);
         } catch (Exception e) {
@@ -112,7 +128,7 @@ public class Procedure {
 
     public void runPrint(String line) {
         String ref = line.substring(5);
-        System.out.println(doMath(ref));
+        System.out.println(dts(doMath(ref), prec));
     }
 
     public void runDisplay(String line) {
@@ -123,13 +139,13 @@ public class Procedure {
     public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
-            ref = ref.replaceAll(keys.get(i), Double.toString(vars.get(i)));
+            ref = ref.replaceAll(keys.get(i), dts(vars.get(i), prec));
         return BooleanParser.parseBool(ref);
     }
 
     public void runRes(String line) throws FileNotFoundException {
         for (int i = 0; i < vars.size(); i++)
-            line = line.replaceAll(keys.get(i), Double.toString(vars.get(i)));
+            line = line.replaceAll(keys.get(i), dts(vars.get(i), prec));
         int equalsIdx = line.indexOf("=");
         int colonIdx = line.indexOf(":");
         String varName = line.substring(3, equalsIdx);
@@ -150,6 +166,7 @@ public class Procedure {
         int paramNum = 0;
         boolean runnable = true;
         int ifs = 0;
+
         for (String line : src) {
             try {
                 // We are starting lineNum at 0 but line numbers actually start at 1
@@ -179,13 +196,13 @@ public class Procedure {
                         } catch (Exception e) {
                             new ImpulseError("ParamError", "I was looking for " + (paramNum + 1) + (paramNum + 1 == 1 ? " parameter" : " parameters") + ", but only " + params.length + (params.length == 1 ? " parameter" : " parameters") + (params.length == 1 ? " was" : " were") + " given.", lineNum, colNum, this.fileName).exit();
                         }
-                    } else if (line.startsWith("print")){
+                    } else if (line.startsWith("print")) {
                         colNum += 5;
                         runPrint(line);
-                    } else if (line.startsWith("display")){
+                    } else if (line.startsWith("display")) {
                         colNum += 7;
                         runDisplay(line);
-                    }else if (line.startsWith("var")) {
+                    } else if (line.startsWith("var")) {
                         colNum += 3;
                         runVar(line);
                     } else if (line.startsWith("res")) {
@@ -193,8 +210,8 @@ public class Procedure {
                         runRes(line);
                     } else if (line.startsWith("if")) {
                         if (!runIf(line)) runnable = false;
-                    } else if (!line.equals("over")){
-                      new ImpulseError("CompileError", "Syntax unintelligble", lineNum, -1, this.fileName).exit();
+                    } else if (!line.equals("over")) {
+                        new ImpulseError("CompileError", "Syntax unintelligble", lineNum, -1, this.fileName).exit();
                     }
                 } else {
                     if (line.startsWith("if")) {
