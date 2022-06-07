@@ -1,0 +1,8 @@
+param n
+param g
+if n >5
+    if g <5
+      return n-1
+    over
+    return n+1
+over

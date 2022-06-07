@@ -1,0 +1,39 @@
+Name,Money,Description
+John Cena,950,Cena is a fighter
+Sylvester Stallone,1000,He plays a role in the movie
+Bruce Lee,500,He is a martial arts master
+Micheal Jackson,500,He is a singer
+Natalie Portman,500,I am mindblown
+Clint Eastwood,500,He is a actor
+Tom Cruise,812330,A very good actor
+Christopher Mykolyk,69421,Best APCS teacher at stuyvesant - he is a genius
+Tiger Woods,500,He is a pro golfer
+Sindre Sorhus,500,He is a programmer
+Liam Neeson,500,He is a actor
+ThunderRedStar,500,Me
+Ari Gurovich,500,He is a programmer
+VSCode,500,He is a IDE
+Git,500,He is a version control system
+GitHub,500,He is a version control system
+GitLab,500,He is a version control system
+GitKraken,500,He is a version control system
+GitBash,500,He is a version control system
+Sublime Text,500,He is a text editor
+Visual Studio Code,500,He is a text editor
+Visual Studio,500,He is a text editor
+Visual Studio Code,500,He is a text editor
+Visual Studio Code,500,He is a text editor
+React,500,He is a front end framework
+React Native,500,He is a front end framework
+Node.js,500,He is a server side framework
+Express.js,500,He is a server side framework
+MongoDB,500,He is a database
+Mongoose,500,He is a database
+MySQL,500,He is a database
+PostgreSQL,500,He is a database
+SQL,500,He is a database
+SQLite,500,He is a database
+Oracle Cloud,500,He is a Cloud Computing platform
+Heroku,500,He is a Cloud Computing platform
+Firebase,500,He is a Cloud Computing platform
+
