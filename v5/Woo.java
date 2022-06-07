@@ -24,6 +24,7 @@ public class Woo{
 			FileWriter iplrcWriter = new FileWriter(iplrcFile);
 			iplrcWriter.write(iplrcContent);
 			iplrcWriter.close();
+			System.out.println("I have written default .iplrc file to your home directory.");
 		}catch(IOException e){
 			System.out.println("Error: Cannot write to .iplrc file.");
 			System.exit(1);
@@ -31,6 +32,18 @@ public class Woo{
 		String currentPath = System.getProperty("user.dir");
 		// .bashrc can be found in the user's home directory
 		String bashrcPath = userHome + "/.bashrc";
+		File bashrcFile = new File(bashrcPath);
+		// Append impulse command alias to .bashrc
+		String bashrcContent = "alias impulse=\"java -cp " + currentPath + " Procedure\"\n";
+		try{
+			FileWriter bashrcWriter = new FileWriter(bashrcFile, true);
+			bashrcWriter.write(bashrcContent);
+			bashrcWriter.close();
+			System.out.println("I have appended impulse command alias to your .bashrc file.");
+		}catch(IOException e){
+			System.out.println("Error: Cannot write to .bashrc file.");
+			System.exit(1);
+		}
 		System.out.println(currentPath);
 		String[][] allCommands = {javacCommand};
 		for (String[] command : allCommands){
