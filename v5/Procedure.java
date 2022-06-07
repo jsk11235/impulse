@@ -94,7 +94,7 @@ public class Procedure {
     public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
         for (int i = 0; i < vars.size(); i++)
-            newMath = newMath.replaceAll(keys.get(i), dts(vars.get(i), prec));
+            newMath = newMath.replaceAll(keys.get(i), dts(vars.get(i), 20));
         try {
             return Double.parseDouble(math);
         } catch (Exception e) {
@@ -140,13 +140,13 @@ public class Procedure {
     public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
-            ref = ref.replaceAll(keys.get(i), dts(vars.get(i), prec));
+            ref = ref.replaceAll(keys.get(i), dts(vars.get(i), 20));
         return BooleanParser.parseBool(ref);
     }
 
     public void runRes(String line) throws FileNotFoundException {
         for (int i = 0; i < vars.size(); i++)
-            line = line.replaceAll(keys.get(i), dts(vars.get(i), prec));
+            line = line.replaceAll(keys.get(i), dts(vars.get(i), 20));
         int equalsIdx = line.indexOf("=");
         int colonIdx = line.indexOf(":");
         String varName = line.substring(3, equalsIdx);
