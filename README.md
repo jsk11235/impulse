@@ -21,7 +21,4 @@ APCS1
 </html>
 
 <h1>BIG NOTE</h1>
-<p>Woo.java is a soft link to Procedure.java!</p>
-
-<h2>Smaller Note</h2>
-<p>If you want to pretend this is an actual language, please <code>cd</code> into the most recent directory and run <code>alias impulse="java Procedure"</code>, then compile the Procedure class and run <pre>impulse [filename] [args]</pre> for the best experience!</p> 
+<p>Woo.java installs the whole language onto your computer (well really it just installs an alias but we can pretend it's very cool)</p>
