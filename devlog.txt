@@ -84,3 +84,16 @@ Jacob Kirmayer :: Worked on print statements
 2022-06-04
 --------------------------------------------------------------
 Jacob Kirmayer :: Got negative numbers to work in the math parser, created iplrc
+==============================================================
+2022-06-06
+--------------------------------------------------------------
+William Vongphanith :: Small fixes, install script
+Jacob Kirmayer :: Install script
+Ari Gurovich :: Work on install script
+==============================================================
+2022-06-07
+--------------------------------------------------------------
+William Vongphanith :: Fix install script
+Jacob Kirmayer :: Language work
+Ari Gurovich :: your job here
+==============================================================
