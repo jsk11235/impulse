@@ -15,7 +15,8 @@ APCS1
     Our product is called... <strong>Impulse Language</strong>!<br>
     It is a novel performant programming language that is based on procedures and files. 
   <h2>Launch</h2>
-  <code>javac Woo.java && java Woo [filename].ipl</code>
+    <code>javac Woo.java && java Woo</code>
+    <code>impulse [file] [params]</code>
   </p>
   </body>
 </html>
