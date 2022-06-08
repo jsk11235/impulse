@@ -95,5 +95,9 @@ Ari Gurovich :: Work on install script
 --------------------------------------------------------------
 William Vongphanith :: Fix install script
 Jacob Kirmayer :: Language work
-Ari Gurovich :: your job here
 ==============================================================
+2022-06-08
+--------------------------------------------------------------
+William Vongphanith :: Worked on flowcharts
+Jacob Kirmayer :: Worked on flowcharts
+Ari Gurovich :: Worked on UML
