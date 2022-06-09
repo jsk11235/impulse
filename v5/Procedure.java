@@ -12,13 +12,14 @@ public class Procedure {
     int colNum = 0;
     int prec = 10;
     boolean scientific = false;
+    public static String dir;
 
     public Procedure(String name) throws FileNotFoundException {
         fileName = name;
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File(  name + ".ipl");
+        File srcFile = new File(  dir+"/"+name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
@@ -228,17 +229,19 @@ public class Procedure {
     public static void main(String[] args) throws FileNotFoundException {
         double[] params = null;
         try {
-            params = new double[args.length - 1];
+            params = new double[args.length-2];
         } catch (Exception e) {
             new ImpulseError("NoFile", "You must provide a file to run.", -1, -1, null).exit();
         }
         int argNum = 0;
         String procName = "";
         for (String arg : args) {
-            if (argNum == 0) procName = arg;
+            if (argNum == 0)
+                dir = arg;
+            else if (argNum==1) procName = arg;
             else {
                 try {
-                    params[argNum - 1] = Double.parseDouble(arg);
+                    params[argNum - 2] = Double.parseDouble(arg);
                 } catch (Exception e) {
                     new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, procName).exit();
                 }
