@@ -19,7 +19,7 @@ public class Procedure {
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File(  dir+"/"+name + ".ipl");
+        File srcFile = new File( dir+"/"+name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
