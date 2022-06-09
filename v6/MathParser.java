@@ -1,0 +1,92 @@
+import java.util.Stack;
+
+public class MathParser {
+    // Another feature buddies
+    private static final int OVERFLOW = RCReader.getOverflow(RCReader.read());
+    private static final char LEFT_PAREN_CHAR = '[';
+    private static final char RIGHT_PAREN_CHAR = ']';
+
+    public static boolean isOp(char c) {
+        return c == '+' || c == '-' || c == '*' || c == '/' || c == '%' || c == '^';
+    }
+
+    public static double parseMath(String mathString) {
+        Stack<Double> values = new Stack<Double>();
+        Stack<Character> ops = new Stack<Character>();
+        boolean justHadOp = true;
+        for (int i = 0; i < mathString.length(); i++) {
+            char c = mathString.charAt(i);
+            if (c == ' ') {
+                continue;
+            }
+            if (c == LEFT_PAREN_CHAR) {
+                ops.push(c);
+                justHadOp = true;
+            } else if (c == RIGHT_PAREN_CHAR) {
+                while (ops.peek() != LEFT_PAREN_CHAR) {
+                    values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+                }
+                ops.pop();
+            } else if (isOp(c)&&!justHadOp) {
+                while (!ops.empty() && hasPrecedence(ops.peek(), c)) {
+                    values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+                }
+                ops.push(c);
+                justHadOp = true;
+            } else {
+                StringBuilder sb = new StringBuilder();
+                sb.append(mathString.charAt(i));
+                i++;
+                while (i < mathString.length() && (Character.isDigit(mathString.charAt(i)) || mathString.charAt(i) == '.' || mathString.charAt(i) == 'E')) {
+                    sb.append(mathString.charAt(i));
+                    i++;
+                }
+                i--;
+                values.push(Double.parseDouble(sb.toString()));
+                justHadOp = false;
+            }
+        }
+        while (!ops.empty()) {
+            values.push(applyOp(ops.pop(), values.pop(), values.pop()));
+        }
+        return values.pop();
+    }
+
+    public static boolean hasPrecedence(char op1, char op2) {
+        // ^ has precedence over * and /
+        // % has precedence over + and -
+        if (op2 == LEFT_PAREN_CHAR || op2 == RIGHT_PAREN_CHAR) {
+            return false;
+        }
+        if (op1 == '^' || op1 == '*' || op1 == '/') {
+            return op2 != '^';
+        }
+        if (op1 == '+' || op1 == '-') {
+            return op2 == '+' || op2 == '-';
+        }
+        return false;
+    }
+
+    public static double applyOp(char op, double b, double a) {
+        if (b > Math.pow(10,OVERFLOW) || a > Math.pow(10,OVERFLOW)) {
+            new ImpulseError("OverflowError", "Numbers cannot be greater than " + Math.pow(10,OVERFLOW), 1, 1, null).exit();
+        } else if (b < -Math.pow(10,OVERFLOW) || a < -Math.pow(10,OVERFLOW)) {
+            new ImpulseError("OverflowError", "Numbers cannot be less than " + -Math.pow(10,OVERFLOW), 1, 1, null).exit();
+        }
+        switch (op) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+            case '/':
+                return a / b;
+            case '%':
+                return a % b;
+            case '^':
+                return Math.pow(a, b);
+        }
+        return 0;
+    }
+}
