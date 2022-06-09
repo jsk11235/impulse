@@ -34,7 +34,7 @@ public class Woo{
 		String bashrcPath = userHome + "/.bashrc";
 		File bashrcFile = new File(bashrcPath);
 		// Append impulse command alias to .bashrc
-		String bashrcContent = "alias impulse=\"java -cp " + currentPath + " Procedure\"\n";
+		String bashrcContent = "alias impulse='java -cp " + currentPath + " Procedure $(pwd)'";
 		try{
 			FileWriter bashrcWriter = new FileWriter(bashrcFile, true);
 			bashrcWriter.write(bashrcContent);
