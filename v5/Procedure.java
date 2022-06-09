@@ -11,6 +11,7 @@ public class Procedure {
     int lineNum = 0;
     int colNum = 0;
     int prec = 10;
+    boolean scientific = false;
 
     public Procedure(String name) throws FileNotFoundException {
         fileName = name;
@@ -34,6 +35,9 @@ public class Procedure {
                     if (data.startsWith("precision")) {
                         prec = Integer.parseInt(data.substring(9));
                     }
+                    if (data.startsWith("scientific")) {
+                        scientific = Boolean.parseBoolean(data.substring(10));
+                    }
                 }
             }
             prefs.close();
@@ -55,36 +59,6 @@ public class Procedure {
         int log = (int) Math.log10(x);
         String digits = digitsOf(x * Math.pow(10, -log), prec);
         return digits.substring(0, 1) + "." + digits.substring(1) + "E" + log;
-    }
-
-
-    public static void main(String[] args) throws FileNotFoundException {
-        double[] params = null;
-        try {
-            params = new double[args.length - 1];
-        } catch (Exception e) {
-            new ImpulseError("NoFile", "You must provide a file to run.", -1, -1, null).exit();
-        }
-        int argNum = 0;
-        String procName = "";
-        for (String arg : args) {
-            if (argNum == 0) procName = arg;
-            else {
-                try {
-                    params[argNum - 1] = Double.parseDouble(arg);
-                } catch (Exception e) {
-                    new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, procName).exit();
-                }
-            }
-            argNum++;
-        }
-        Procedure proc = null;
-        try {
-            proc = new Procedure(procName);
-        } catch (FileNotFoundException e) {
-            new ImpulseError("FileNotFound", "The file " + procName + ".ipl was not found.", -1, -1, null).exit();
-        }
-        proc.run(params);
     }
 
     public String toString() {
@@ -128,8 +102,30 @@ public class Procedure {
     }
 
     public void runPrint(String line) {
+        String sign = "";
         String ref = line.substring(5);
-        System.out.println(dts(doMath(ref), prec));
+        String mathRes = dts(doMath(ref), prec);
+        if (mathRes.startsWith("-")) {
+            sign = "-";
+            mathRes = mathRes.substring(1);
+        }
+        if (scientific)
+            System.out.println(sign+mathRes);
+        else {
+            int exp = Integer.parseInt(mathRes.substring(mathRes.length()-1));
+            String digits = mathRes.substring(0,1)+mathRes.substring(2,mathRes.length()-2);
+            if (exp<0){
+                for (int i = 0;i<-exp;i++)
+                    digits = "0"+digits;
+                System.out.println(sign+digits.substring(0)+"."+digits.substring(1));
+            } else if (exp>digits.length()){
+                for (int i = 0;i<exp+1-digits.length();i++)
+                    digits += "0";
+                System.out.println(sign+digits);
+            } else {
+                System.out.println(sign+digits.substring(0,exp+1)+"."+ digits.substring(exp+1));
+            }
+        }
     }
 
     public void runDisplay(String line) {
@@ -225,5 +221,34 @@ public class Procedure {
         }
         new ImpulseError("RunError", "No Return Value", -1, -1, this.fileName).exit();
         return 0;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+        double[] params = null;
+        try {
+            params = new double[args.length - 1];
+        } catch (Exception e) {
+            new ImpulseError("NoFile", "You must provide a file to run.", -1, -1, null).exit();
+        }
+        int argNum = 0;
+        String procName = "";
+        for (String arg : args) {
+            if (argNum == 0) procName = arg;
+            else {
+                try {
+                    params[argNum - 1] = Double.parseDouble(arg);
+                } catch (Exception e) {
+                    new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, procName).exit();
+                }
+            }
+            argNum++;
+        }
+        Procedure proc = null;
+        try {
+            proc = new Procedure(procName);
+        } catch (FileNotFoundException e) {
+            new ImpulseError("FileNotFound", "The file " + procName + ".ipl was not found.", -1, -1, null).exit();
+        }
+        proc.run(params);
     }
 }
