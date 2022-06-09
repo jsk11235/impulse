@@ -18,7 +18,7 @@ public class Procedure {
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File("./examples/" + name + ".ipl");
+        File srcFile = new File(  name + ".ipl");
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
             String data = StringUtils.removeSpaces(reader.nextLine());
@@ -57,6 +57,8 @@ public class Procedure {
             return "-" + dts(-1 * x, prec);
         }
         int log = (int) Math.log10(x);
+        if (x==0)
+            log = 0;
         String digits = digitsOf(x * Math.pow(10, -log), prec);
         return digits.substring(0, 1) + "." + digits.substring(1) + "E" + log;
     }
@@ -68,7 +70,7 @@ public class Procedure {
     public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
         for (int i = 0; i < vars.size(); i++)
-            newMath = newMath.replaceAll(keys.get(i), dts(vars.get(i), 20));
+            newMath = newMath.replaceAll(keys.get(i), dts(vars.get(i), 14));
         try {
             return Double.parseDouble(math);
         } catch (Exception e) {
@@ -136,13 +138,13 @@ public class Procedure {
     public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
-            ref = ref.replaceAll(keys.get(i), dts(vars.get(i), 20));
+            ref = ref.replaceAll(keys.get(i), dts(vars.get(i), 14));
         return BooleanParser.parseBool(ref);
     }
 
     public void runRes(String line) throws FileNotFoundException {
         for (int i = 0; i < vars.size(); i++)
-            line = line.replaceAll(keys.get(i), dts(vars.get(i), 20));
+            line = line.replaceAll(keys.get(i), dts(vars.get(i), 14));
         int equalsIdx = line.indexOf("=");
         int colonIdx = line.indexOf(":");
         String varName = line.substring(3, equalsIdx);
@@ -206,9 +208,9 @@ public class Procedure {
                         colNum += 3;
                         runRes(line);
                     } else if (line.startsWith("if")) {
-                        if (!runIf(line)) runnable = false;
-                    } else if (!line.equals("over")) {
-                        new ImpulseError("CompileError", "Syntax unintelligble", lineNum, -1, this.fileName).exit();
+                        if (!runIf(line)) {
+                            runnable = false;
+                        }
                     }
                 } else {
                     if (line.startsWith("if")) {
@@ -216,7 +218,7 @@ public class Procedure {
                     }
                 }
             } catch (Exception e) {
-                new ImpulseError("RunError", "Something unexpected happened while running the procedure.", -1, -1, this.fileName).exit();
+                new ImpulseError("RunError", "Something unexpected happened while running the procedure.", lineNum, -1, this.fileName).exit();
             }
         }
         new ImpulseError("RunError", "No Return Value", -1, -1, this.fileName).exit();
