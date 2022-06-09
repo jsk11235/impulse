@@ -1,0 +1,23 @@
+param m
+param n
+
+if m > n
+  return 0
+over
+
+if m < 0
+  return 0
+over
+
+if n = 0
+  return 1
+over
+
+res chooseAll = choose: m, n - 1
+res chooseAllButOne = choose: m - 1, n - 1
+
+print n
+print m
+
+print chooseAll+chooseAllButOne
+return chooseAll+chooseAllButOne

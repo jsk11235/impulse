@@ -1,0 +1,12 @@
+param num1
+param num2
+
+if num1 < num2
+    return num1
+over
+
+if num1 > num2
+    return num2
+over
+
+return num1

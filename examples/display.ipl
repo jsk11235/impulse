@@ -1,0 +1,6 @@
+displayln "This is a message that gets printed to the console."
+displayln "No way!"
+display "The answer to 9 + 7 is "
+print 9 + 7
+
+return 0

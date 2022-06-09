@@ -1,0 +1,4 @@
+prompt num1,"Enter a first number to add"
+prompt num2,"Enter a second number to add"
+print num1 + num2
+return num1 + num2

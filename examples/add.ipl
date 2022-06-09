@@ -1,3 +1,11 @@
+$ Add two numbers.
+
+[$
+  Author: ThunderRedStar
+  Comment: This is a multi-line comment
+$]
+
 param addend1
 param addend2
+
 return addend1 + addend2
