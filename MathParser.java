@@ -1,6 +1,8 @@
 import java.util.Stack;
 
 public class MathParser {
+    // Another feature buddies
+    private static final int OVERFLOW = RCReader.getOverflow(RCReader.read());
     private static final char LEFT_PAREN_CHAR = '[';
     private static final char RIGHT_PAREN_CHAR = ']';
 
@@ -66,6 +68,12 @@ public class MathParser {
     }
 
     public static double applyOp(char op, double b, double a) {
+        if (b > Math.pow(10,OVERFLOW) || a > Math.pow(10,OVERFLOW)) {
+            new ImpulseError("OverflowError", "Numbers cannot be greater than " + Math.pow(10,OVERFLOW), 1, 1, null).exit();
+        }
+        if (b < -Math.pow(10,OVERFLOW) || a < -Math.pow(10,OVERFLOW)) {
+            new ImpulseError("OverflowError", "Numbers cannot be less than " + -Math.pow(10,OVERFLOW), 1, 1, null).exit();
+        }
         switch (op) {
             case '+':
                 return a + b;

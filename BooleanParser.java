@@ -5,7 +5,8 @@ public class BooleanParser {
     private static final char RIGHT_PAREN_CHAR = ']';
 
     public static boolean isOp(char c) {
-        return c == '|' || c == '&' || c == '=' || c == '>' || c == '<' || c == '[' || c == ']';
+        // Include XOR so we can create a rudimentary not operator
+        return c == '|' || c == '&' || c == '=' || c == '>' || c == '<' || c == '[' || c == ']' || c == '#';
     }
 
     public static boolean parseBool(String boolString) {
@@ -26,7 +27,6 @@ public class BooleanParser {
                 ops.pop();
             } else if (isOp(c)) {
                 while (!ops.empty() && hasPrecedence(ops.peek(), c)) {
-
                     values.push(Boolean.toString(applyOp(ops.pop(), values.pop(), values.pop())));
                 }
                 ops.push(c);
@@ -65,6 +65,9 @@ public class BooleanParser {
                 return a || b;
             case '&':
                 return a && b;
+            case '#':
+                // XOR
+                return a ^ b;
         }
         return false;
     }

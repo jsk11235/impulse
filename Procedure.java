@@ -2,66 +2,104 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+// Hashmap
+import java.util.HashMap;
 
 public class Procedure {
     String fileName;
+    String filePath;
     ArrayList<Double> vars;
     ArrayList<String> keys;
     ArrayList<String> src;
+    HashMap<String, Procedure> childProcedures = new HashMap<String, Procedure>();
     int lineNum = 0;
     int colNum = 0;
-    int prec = 10;
-    boolean scientific = false;
-    public static String dir;
+    int prec = RCReader.getPrecision(RCReader.read());
+    boolean isChildProcedure = false;
 
     public Procedure(String name) throws FileNotFoundException {
         fileName = name;
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
-        File srcFile = new File( dir+"/"+name + ".ipl");
+        File srcFile = new File(name);
         Scanner reader = new Scanner(srcFile);
         while (reader.hasNextLine()) {
-            String data = StringUtils.removeSpaces(reader.nextLine());
-            if (data.length() > 0) src.add(data);
+            String line = reader.nextLine();
+            if (StringUtils.removeSpaces(line).length() > 0) {
+                src.add(line.trim());
+            }
         }
         reader.close();
-        try {
-            String home = System.getProperty("user.home");
-            File iplrc = new File(home+"/.iplrc");
-            Scanner prefs = new Scanner(iplrc);
-            while (prefs.hasNextLine()) {
-                String data = StringUtils.removeSpaces(prefs.nextLine());
-                if (data.length() > 0) {
-                    if (data.startsWith("precision")) {
-                        prec = Integer.parseInt(data.substring(9));
-                    }
-                    if (data.startsWith("scientific")) {
-                        scientific = Boolean.parseBoolean(data.substring(10));
-                    }
+        prec = RCReader.getPrecision(RCReader.read());
+        // Store path
+        filePath = srcFile.getAbsolutePath().substring(0, srcFile.getAbsolutePath().lastIndexOf(File.separator));
+    }
+
+    public Procedure(String name, boolean icp) throws FileNotFoundException {
+        fileName = name;
+        isChildProcedure = icp;
+        src = new ArrayList<>();
+        vars = new ArrayList<>();
+        keys = new ArrayList<>();
+        File srcFile = new File(name);
+        Scanner reader = new Scanner(srcFile);
+        while (reader.hasNextLine()) {
+            String line = reader.nextLine();
+            if (StringUtils.removeSpaces(line).length() > 0) {
+                src.add(line.trim());
+            }
+        }
+        reader.close();
+        prec = RCReader.getPrecision(RCReader.read());
+        // Store path
+        filePath = srcFile.getAbsolutePath().substring(0, srcFile.getAbsolutePath().lastIndexOf(File.separator));
+    }
+
+
+    public static void main(String[] args) throws FileNotFoundException {
+        double[] params = null;
+        params = getParams(args);
+        int argNum = 0;
+        String procName = "";
+        for (String arg : args) {
+            if (argNum == 0) procName = arg;
+            else {
+                try {
+                    params[argNum - 1] = Double.parseDouble(arg);
+                } catch (Exception e) {
+                    new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, procName).exit();
                 }
             }
-            prefs.close();
-        } catch(Exception e){System.out.println(e);}
+            argNum++;
+        }
+        Procedure proc = null;
+        proc = getProcedure(procName);
+        proc.run(params);
     }
 
-    public static String digitsOf(double x, int prec) {
-        if (prec == 0) {
-            return "";
+    private static Procedure getProcedure(String procName) {
+        Procedure proc = null;
+        try {
+            proc = new Procedure(procName);
+        } catch (FileNotFoundException e) {
+            if (procName.equals("")) {
+                REPL.repl();
+            } else {
+                new ImpulseError("FileNotFound", "The procedure " + procName + " was not found.", -1, -1, procName).exit();
+            }
         }
-        int floor = (int) x;
-        return floor + digitsOf(10 * (x - floor), prec - 1);
+        return proc;
     }
 
-    public static String dts(double x, int prec) {
-        if (x < 0) {
-            return "-" + dts(-1 * x, prec);
+    private static double[] getParams(String[] args) {
+        double[] params = null;
+        try {
+            params = new double[args.length - 1];
+        } catch (Exception e) {
+            new REPL();
         }
-        int log = (int) Math.log10(x);
-        if (x==0)
-            log = 0;
-        String digits = digitsOf(x * Math.pow(10, -log), prec);
-        return digits.substring(0, 1) + "." + digits.substring(1) + "E" + log;
+        return params;
     }
 
     public String toString() {
@@ -71,10 +109,11 @@ public class Procedure {
     public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
         for (int i = 0; i < vars.size(); i++)
-            newMath = newMath.replaceAll(keys.get(i), dts(vars.get(i), 14));
+            newMath = newMath.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), prec));
         try {
             return Double.parseDouble(math);
         } catch (Exception e) {
+
         }
         return MathParser.parseMath(newMath);
     }
@@ -84,7 +123,14 @@ public class Procedure {
         for (int i = 0; i < keys.size(); i++) {
             if (ref.equals(keys.get(i))) return vars.get(i);
         }
-        return doMath(ref);
+        if (this.isChildProcedure) {
+            return doMath(ref);
+        } else {
+            System.out.println(doMath(ref));
+            System.out.println(Colors.bold(Colors.green("Script exited without error.")));
+            System.exit(0);
+            return -1;
+        }
     }
 
     public void runParam(String line, double value) {
@@ -105,47 +151,31 @@ public class Procedure {
     }
 
     public void runPrint(String line) {
-        String sign = "";
         String ref = line.substring(5);
-        String mathRes = dts(doMath(ref), prec);
-        if (mathRes.startsWith("-")) {
-            sign = "-";
-            mathRes = mathRes.substring(1);
-        }
-        if (scientific)
-            System.out.println(sign+mathRes);
-        else {
-            int exp = Integer.parseInt(mathRes.substring(mathRes.length()-1));
-            String digits = mathRes.substring(0,1)+mathRes.substring(2,mathRes.length()-2);
-            if (exp<0){
-                for (int i = 0;i<-exp;i++)
-                    digits = "0"+digits;
-                System.out.println(sign+digits.substring(0)+"."+digits.substring(1));
-            } else if (exp>digits.length()){
-                for (int i = 0;i<exp+1-digits.length();i++)
-                    digits += "0";
-                System.out.println(sign+digits);
-            } else {
-                System.out.println(sign+digits.substring(0,exp+1)+"."+ digits.substring(exp+1));
-            }
-        }
+        System.out.println(MathUtils.dts(doMath(ref), prec));
     }
 
     public void runDisplay(String line) {
-        String ref = line.substring(7);
-        System.out.println(ref);
+        // Check if the command actually is displayln
+        if (line.substring(7,9).equals("ln")) {
+            String ref = line.substring(10);
+            System.out.println(ref.replaceAll("\"", ""));
+        } else {
+            String ref = line.substring(8);
+            System.out.print(ref.replaceAll("\"", ""));
+        }
     }
 
     public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
-            ref = ref.replaceAll(keys.get(i), dts(vars.get(i), 14));
+            ref = ref.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), prec));
         return BooleanParser.parseBool(ref);
     }
 
     public void runRes(String line) throws FileNotFoundException {
         for (int i = 0; i < vars.size(); i++)
-            line = line.replaceAll(keys.get(i), dts(vars.get(i), 14));
+            line = line.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), prec));
         int equalsIdx = line.indexOf("=");
         int colonIdx = line.indexOf(":");
         String varName = line.substring(3, equalsIdx);
@@ -157,18 +187,56 @@ public class Procedure {
             newParams[idx] = doMath(s);
             idx++;
         }
-        Procedure newProc = new Procedure(procName);
+        if (childProcedures.containsKey(procName)) {
+            double res = childProcedures.get(procName).run(newParams);
+            vars.add(res);
+            keys.add(varName);
+        } else {
+            Procedure proc = new Procedure(filePath + File.separator + procName + ".ipl", true);
+            double res = proc.run(newParams);
+            vars.add(res);
+            keys.add(varName);
+        }
+    }
+
+    public void runPrompt(String line) {
+        // Prompt the user for input. The first variable will be the var name to store the input in, and the second variable will be the prompt.
+        String ref = line.substring(7);
+        String varName = ref.split(",")[0];
+        String prompt = ref.split(",")[1];
+        System.out.println(Colors.italic(prompt.replaceAll("\"","")) + ": " + Colors.reset());
+        Scanner reader = new Scanner(System.in);
+        String input = reader.nextLine().replace("\n", "");
+        vars.add(doMath(input));
         keys.add(varName);
-        vars.add(newProc.run(newParams));
+    }
+
+    public void attemptImport (String line) {
+        // Import will import a procedure from a file that could be outside of the current directory.
+        // An import statement will look like this: import "filename" as "procName"
+        // After this statement, the procedure that is being added can be called with the name "procName", like procedures within the directory.
+
+        // Get the directory of the procedure calling the import statement.
+        String ref = line.substring(6);
+        String[] split = ref.split("\"");
+        String fileName = split[1];
+        String procName = split[3];
+        try {
+            Procedure proc = new Procedure(filePath + File.separator + fileName, true);
+            childProcedures.put(procName, proc);
+        } catch (FileNotFoundException e) {
+            new ImpulseError("ProcedureNotFound", "The procedure in file " + fileName + " was not found.", -1, -1, null).exit();
+        }
     }
 
     public double run(double[] params) throws FileNotFoundException {
         int paramNum = 0;
         boolean runnable = true;
         int ifs = 0;
+        boolean isOpenComment = false;
 
         for (String line : src) {
-            try {
+            /*try {*/
                 // We are starting lineNum at 0 but line numbers actually start at 1
                 lineNum++;
                 colNum = 0;
@@ -181,36 +249,51 @@ public class Procedure {
                     }
                 }
                 if (runnable) {
-                    if (line.startsWith("return")) {
+                    if (line.startsWith("$")) {
+                        // It's a comment
+                        continue;
+                    } else if (line.startsWith("[$")) {
+                        // Multi-line comment opening
+                        isOpenComment = true;
+                        continue;
+                    } else if (line.endsWith("$]") && isOpenComment) {
+                        // Multi-line comment closing
+                        isOpenComment = false;
+                        continue;
+                    } else if (line.startsWith("prompt")) {
                         colNum += 6;
-                        try {
-                            return runReturn(line);
-                        } catch (Exception e) {
-                            new ImpulseError("ReturnError", "Return statement was not given a value, or something unexpected happened.", lineNum, colNum, this.fileName).exit();
-                        }
-                    } else if (line.startsWith("param")) {
-                        colNum += 5;
-                        try {
-                            runParam(line, params[paramNum]);
-                            paramNum++;
-                        } catch (Exception e) {
-                            new ImpulseError("ParamError", "I was looking for " + (paramNum + 1) + (paramNum + 1 == 1 ? " parameter" : " parameters") + ", but only " + params.length + (params.length == 1 ? " parameter" : " parameters") + (params.length == 1 ? " was" : " were") + " given.", lineNum, colNum, this.fileName).exit();
-                        }
-                    } else if (line.startsWith("print")) {
-                        colNum += 5;
-                        runPrint(line);
+                        runPrompt(line);
                     } else if (line.startsWith("display")) {
                         colNum += 7;
                         runDisplay(line);
-                    } else if (line.startsWith("var")) {
-                        colNum += 3;
-                        runVar(line);
-                    } else if (line.startsWith("res")) {
-                        colNum += 3;
-                        runRes(line);
-                    } else if (line.startsWith("if")) {
-                        if (!runIf(line)) {
-                            runnable = false;
+                    } else {
+                        line = StringUtils.removeSpaces(line);
+                        if (line.startsWith("return")) {
+                            colNum += 6;
+                            return attemptReturn(line);
+                        } else if (line.startsWith("param")) {
+                            colNum += 5;
+                            paramNum = attemptSetParam(params, paramNum, line);
+                        } else if (line.startsWith("import")) {
+                            colNum += 6;
+                            attemptImport(line);
+                        } else if (line.startsWith("print")) {
+                            colNum += 5;
+                            runPrint(line);
+                        } else if (line.startsWith("var")) {
+                            colNum += 3;
+                            runVar(line);
+                        } else if (line.startsWith("res")) {
+                            colNum += 3;
+                            runRes(line);
+                        } else if (line.startsWith("if")) {
+                            if (!runIf(line)) runnable = false;
+                        } else if (line.startsWith("exit")) {
+                            colNum += 5;
+                            System.out.println(Colors.bold(Colors.yellow("Impulse exited prematurely.")));
+                            System.exit(0);
+                        } else if (!line.equals("over") && !isOpenComment) {
+                            new ImpulseError("CompileError", "I don't know what " + line.split(" ")[0] + " is.", lineNum, -1, this.fileName).exit();
                         }
                     }
                 } else {
@@ -218,42 +301,33 @@ public class Procedure {
                         ifs++;
                     }
                 }
-            } catch (Exception e) {
+            /*} catch (Exception e) {
+                System.out.println(e);
+                Thread.dumpStack();
                 new ImpulseError("RunError", "Something unexpected happened while running the procedure.", lineNum, -1, this.fileName).exit();
-            }
+            }*/
         }
         new ImpulseError("RunError", "No Return Value", -1, -1, this.fileName).exit();
         return 0;
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
-        double[] params = null;
+    private int attemptSetParam(double[] params, int paramNum, String line) {
         try {
-            params = new double[args.length-2];
+            runParam(line, params[paramNum]);
+            paramNum++;
         } catch (Exception e) {
-            new ImpulseError("NoFile", "You must provide a file to run.", -1, -1, null).exit();
+            new ImpulseError("ParamError", "I was looking for " + (paramNum + 1) + (paramNum + 1 == 1 ? " parameter" : " parameters") + ", but only " + params.length + (params.length == 1 ? " parameter" : " parameters") + (params.length == 1 ? " was" : " were") + " given.", lineNum, colNum, this.fileName).exit();
         }
-        int argNum = 0;
-        String procName = "";
-        for (String arg : args) {
-            if (argNum == 0)
-                dir = arg;
-            else if (argNum==1) procName = arg;
-            else {
-                try {
-                    params[argNum - 2] = Double.parseDouble(arg);
-                } catch (Exception e) {
-                    new ImpulseError("MissingArgument", "No argument was provided for " + arg + " when one was expected.", -1, -1, procName).exit();
-                }
-            }
-            argNum++;
-        }
-        Procedure proc = null;
+        return paramNum;
+    }
+
+    private double attemptReturn(String line) {
         try {
-            proc = new Procedure(procName);
-        } catch (FileNotFoundException e) {
-            new ImpulseError("FileNotFound", "The file " + procName + ".ipl was not found.", -1, -1, null).exit();
+            return runReturn(line);
+        } catch (Exception e) {
+            new ImpulseError("ReturnError", "Return statement was not given a value, or something unexpected happened.", lineNum, colNum, this.fileName).exit();
+            return 0;
         }
-        proc.run(params);
+
     }
 }
