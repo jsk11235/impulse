@@ -11,6 +11,7 @@ public class Procedure {
     ArrayList<Double> vars;
     ArrayList<String> keys;
     ArrayList<String> src;
+    HashMap<String, Procedure> childProcedures = new HashMap<String, Procedure>();
     int lineNum = 0;
     int colNum = 0;
     int prec = 10;
@@ -154,10 +155,17 @@ public class Procedure {
             newParams[idx] = doMath(s);
             idx++;
         }
-        Procedure newProc = new Procedure(filePath + File.separator + procName + ".ipl");
-        keys.add(varName);
-        double result = newProc.run(newParams);
-        vars.add(result);
+        if (childProcedures.containsKey(procName)) {
+            double res = childProcedures.get(procName).run(newParams);
+            vars.add(res);
+            keys.add(varName);
+        } else {
+            Procedure proc = new Procedure(procName);
+            childProcedures.put(procName, proc);
+            double res = proc.run(newParams);
+            vars.add(res);
+            keys.add(varName);
+        }
     }
 
     public void runPrompt(String line) {
@@ -170,6 +178,24 @@ public class Procedure {
         String input = reader.nextLine().replace("\n", "");
         vars.add(doMath(input));
         keys.add(varName);
+    }
+
+    public void attemptImport (String line) {
+        // Import will import a procedure from a file that could be outside of the current directory.
+        // An import statement will look like this: import "filename" as "procName"
+        // After this statement, the procedure that is being added can be called with the name "procName", like procedures within the directory.
+
+        // Get the directory of the procedure calling the import statement.
+        String ref = line.substring(6);
+        String[] split = ref.split("\"");
+        String fileName = split[1];
+        String procName = split[3];
+        try {
+            Procedure proc = new Procedure(filePath + File.separator + fileName);
+            childProcedures.put(procName, proc);
+        } catch (FileNotFoundException e) {
+            new ImpulseError("ProcedureNotFound", "The procedure in file " + fileName + " was not found.", -1, -1, null).exit();
+        }
     }
 
     public double run(double[] params) throws FileNotFoundException {
@@ -217,6 +243,9 @@ public class Procedure {
                         } else if (line.startsWith("param")) {
                             colNum += 5;
                             paramNum = attemptSetParam(params, paramNum, line);
+                        } else if (line.startsWith("import")) {
+                            colNum += 6;
+                            attemptImport(line);
                         } else if (line.startsWith("print")) {
                             colNum += 5;
                             runPrint(line);

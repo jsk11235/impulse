@@ -1,0 +1,9 @@
+import "../v6/examples/min.ipl" as "min"
+
+param num1
+param num2
+
+res result = min: num1, num2
+
+print result
+return result

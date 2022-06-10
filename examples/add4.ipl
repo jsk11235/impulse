@@ -5,9 +5,9 @@ param addend2
 param addend3
 param addend4
 
-res res1 = add: addend1, addend2
-res res2 = add: addend3, addend4
-res res = add: res1, res2
+res res1 = add2: addend1, addend2
+res res2 = add2: addend3, addend4
+res res = add2: res1, res2
 
 print res
 return res
