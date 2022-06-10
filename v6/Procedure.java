@@ -14,7 +14,7 @@ public class Procedure {
     HashMap<String, Procedure> childProcedures = new HashMap<String, Procedure>();
     int lineNum = 0;
     int colNum = 0;
-    int prec = 10;
+    int prec = RCReader.getPrecision(RCReader.read());
     boolean isChildProcedure = false;
 
     public Procedure(String name) throws FileNotFoundException {
@@ -129,7 +129,7 @@ public class Procedure {
             System.out.println(doMath(ref));
             System.out.println(Colors.bold(Colors.green("Script exited without error.")));
             System.exit(0);
-            return 0;
+            return -1;
         }
     }
 
@@ -169,13 +169,13 @@ public class Procedure {
     public boolean runIf(String line) {
         String ref = line.substring(2);
         for (int i = 0; i < vars.size(); i++)
-            ref = ref.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), 20));
+            ref = ref.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), prec));
         return BooleanParser.parseBool(ref);
     }
 
     public void runRes(String line) throws FileNotFoundException {
         for (int i = 0; i < vars.size(); i++)
-            line = line.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), 20));
+            line = line.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), prec));
         int equalsIdx = line.indexOf("=");
         int colonIdx = line.indexOf(":");
         String varName = line.substring(3, equalsIdx);
@@ -192,8 +192,7 @@ public class Procedure {
             vars.add(res);
             keys.add(varName);
         } else {
-            Procedure proc = new Procedure(procName, true);
-            childProcedures.put(procName, proc);
+            Procedure proc = new Procedure(filePath + File.separator + procName + ".ipl", true);
             double res = proc.run(newParams);
             vars.add(res);
             keys.add(varName);
@@ -237,7 +236,7 @@ public class Procedure {
         boolean isOpenComment = false;
 
         for (String line : src) {
-            try {
+            /*try {*/
                 // We are starting lineNum at 0 but line numbers actually start at 1
                 lineNum++;
                 colNum = 0;
@@ -302,10 +301,11 @@ public class Procedure {
                         ifs++;
                     }
                 }
-            } catch (Exception e) {
+            /*} catch (Exception e) {
                 System.out.println(e);
-                new ImpulseError("RunError", "Something unexpected happened while running the procedure.", -1, -1, this.fileName).exit();
-            }
+                Thread.dumpStack();
+                new ImpulseError("RunError", "Something unexpected happened while running the procedure.", lineNum, -1, this.fileName).exit();
+            }*/
         }
         new ImpulseError("RunError", "No Return Value", -1, -1, this.fileName).exit();
         return 0;
@@ -326,7 +326,8 @@ public class Procedure {
             return runReturn(line);
         } catch (Exception e) {
             new ImpulseError("ReturnError", "Return statement was not given a value, or something unexpected happened.", lineNum, colNum, this.fileName).exit();
+            return 0;
         }
-        return 0;
+
     }
 }

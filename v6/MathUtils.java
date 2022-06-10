@@ -2,6 +2,7 @@ public class MathUtils {
 
     private static double EPSILON = RCReader.getEpsilon(RCReader.read());
     private static String MODE = RCReader.getMode(RCReader.read());
+
     public static String digitsOf(double x, int prec) {
         if (prec == 0) {
             return "";
@@ -11,11 +12,12 @@ public class MathUtils {
     }
 
     public static String dts(double x, int prec) {
+        prec = RCReader.getPrecision(RCReader.read());
         if (x < 0) {
             return "-" + dts(-1 * x, prec);
         }
         if (Math.abs((double) ((int) x - x)) < EPSILON && Math.abs(x) < Math.pow(10, prec) && !MODE.equals("scientific")) {
-            return "" + (int) x;
+            return "" + Math.round(x);
         } else {
             // If the absolute value of the double is within the range of the double's precision,
             // we can use the double's toString method to get a string representation of the double.
@@ -24,13 +26,17 @@ public class MathUtils {
             }
             // Otherwise, we need to use the log10 method to get the exponent of the double.
             int exp = (int) Math.log10(x);
+            if (exp == Integer.MIN_VALUE) {
+                // Known bug
+                exp = 0;
+            }
             // We then use the digitsOf method to get the digits of the double,
             // and then we use the digitsOf method to get the digits of the exponent.
             // We then append the digits of the exponent to the digits of the double.
             String digitsNotSplit = digitsOf(x * Math.pow(10, -exp), prec);
             String digits = digitsNotSplit.substring(0, 1) + "." + digitsNotSplit.substring(1, prec);
             String number = digits + "E" + exp;
-            return removeExcessRoundingErrorFromString(number);
+            return number;
         }
     }
 

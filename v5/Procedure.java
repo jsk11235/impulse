@@ -219,7 +219,8 @@ public class Procedure {
                     }
                 }
             } catch (Exception e) {
-                new ImpulseError("RunError", "Something unexpected happened while running the procedure.", lineNum, -1, this.fileName).exit();
+                Thread.dumpStack();
+                new ImpulseError("RunError", "Something unexpected happened while running the procedure.", lineNum, 0, this.fileName).exit();
             }
         }
         new ImpulseError("RunError", "No Return Value", -1, -1, this.fileName).exit();

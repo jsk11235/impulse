@@ -39,7 +39,7 @@ public class Woo {
             }
             // If user wants to overwrite the existing .iplrc file, reset the configuration
             if (input.trim().equals("y")) {
-                RCReader.resetConfig();
+                RCReader.write(RCReader.getDefaultIplrcContent());
                 System.out.println(Colors.bold(Colors.green("[INFO] .iplrc file overwritten.")));
             } else {
                 System.out.println(Colors.bold(Colors.green("[INFO] Skipping iplrc overwrite.")));

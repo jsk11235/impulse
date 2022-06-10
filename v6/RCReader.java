@@ -15,6 +15,10 @@ public class RCReader {
         "precision", "overflow", "epsilon", "mode"
     };
 
+    public static String[] getDefaultIplrcContent() {
+        return DEFAULT_IPLRC_CONTENT;
+    }
+
     public static String[] read() {
         String[] lines = null;
         try {

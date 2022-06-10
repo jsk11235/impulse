@@ -70,7 +70,8 @@ public class MathParser {
     public static double applyOp(char op, double b, double a) {
         if (b > Math.pow(10,OVERFLOW) || a > Math.pow(10,OVERFLOW)) {
             new ImpulseError("OverflowError", "Numbers cannot be greater than " + Math.pow(10,OVERFLOW), 1, 1, null).exit();
-        } else if (b < -Math.pow(10,OVERFLOW) || a < -Math.pow(10,OVERFLOW)) {
+        }
+        if (b < -Math.pow(10,OVERFLOW) || a < -Math.pow(10,OVERFLOW)) {
             new ImpulseError("OverflowError", "Numbers cannot be less than " + -Math.pow(10,OVERFLOW), 1, 1, null).exit();
         }
         switch (op) {
