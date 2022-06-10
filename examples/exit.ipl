@@ -1,0 +1,9 @@
+var x = 10
+var y = 20
+var z = x + y
+print x
+exit
+
+$ the code below will not be executed
+var a = x + 30
+print a

@@ -15,9 +15,30 @@ public class Procedure {
     int lineNum = 0;
     int colNum = 0;
     int prec = 10;
+    boolean isChildProcedure = false;
 
     public Procedure(String name) throws FileNotFoundException {
         fileName = name;
+        src = new ArrayList<>();
+        vars = new ArrayList<>();
+        keys = new ArrayList<>();
+        File srcFile = new File(name);
+        Scanner reader = new Scanner(srcFile);
+        while (reader.hasNextLine()) {
+            String line = reader.nextLine();
+            if (StringUtils.removeSpaces(line).length() > 0) {
+                src.add(line.trim());
+            }
+        }
+        reader.close();
+        prec = RCReader.getPrecision(RCReader.read());
+        // Store path
+        filePath = srcFile.getAbsolutePath().substring(0, srcFile.getAbsolutePath().lastIndexOf(File.separator));
+    }
+
+    public Procedure(String name, boolean icp) throws FileNotFoundException {
+        fileName = name;
+        isChildProcedure = icp;
         src = new ArrayList<>();
         vars = new ArrayList<>();
         keys = new ArrayList<>();
@@ -62,7 +83,11 @@ public class Procedure {
         try {
             proc = new Procedure(procName);
         } catch (FileNotFoundException e) {
-            new ImpulseError("FileNotFound", "The file " + procName + " was not found.", -1, -1, null).exit();
+            if (procName.equals("")) {
+                REPL.repl();
+            } else {
+                new ImpulseError("FileNotFound", "The procedure " + procName + " was not found.", -1, -1, procName).exit();
+            }
         }
         return proc;
     }
@@ -72,7 +97,7 @@ public class Procedure {
         try {
             params = new double[args.length - 1];
         } catch (Exception e) {
-            new ImpulseError("NoFile", "You must provide a file to run.", -1, -1, null).exit();
+            new REPL();
         }
         return params;
     }
@@ -84,7 +109,7 @@ public class Procedure {
     public double doMath(String math) {
         String newMath = StringUtils.removeSpaces(math);
         for (int i = 0; i < vars.size(); i++)
-            newMath = newMath.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), 20));
+            newMath = newMath.replaceAll(keys.get(i), MathUtils.dts(vars.get(i), prec));
         try {
             return Double.parseDouble(math);
         } catch (Exception e) {
@@ -98,7 +123,14 @@ public class Procedure {
         for (int i = 0; i < keys.size(); i++) {
             if (ref.equals(keys.get(i))) return vars.get(i);
         }
-        return doMath(ref);
+        if (this.isChildProcedure) {
+            return doMath(ref);
+        } else {
+            System.out.println(doMath(ref));
+            System.out.println(Colors.bold(Colors.green("Script exited without error.")));
+            System.exit(0);
+            return 0;
+        }
     }
 
     public void runParam(String line, double value) {
@@ -160,7 +192,7 @@ public class Procedure {
             vars.add(res);
             keys.add(varName);
         } else {
-            Procedure proc = new Procedure(procName);
+            Procedure proc = new Procedure(procName, true);
             childProcedures.put(procName, proc);
             double res = proc.run(newParams);
             vars.add(res);
@@ -191,7 +223,7 @@ public class Procedure {
         String fileName = split[1];
         String procName = split[3];
         try {
-            Procedure proc = new Procedure(filePath + File.separator + fileName);
+            Procedure proc = new Procedure(filePath + File.separator + fileName, true);
             childProcedures.put(procName, proc);
         } catch (FileNotFoundException e) {
             new ImpulseError("ProcedureNotFound", "The procedure in file " + fileName + " was not found.", -1, -1, null).exit();
@@ -257,6 +289,10 @@ public class Procedure {
                             runRes(line);
                         } else if (line.startsWith("if")) {
                             if (!runIf(line)) runnable = false;
+                        } else if (line.startsWith("exit")) {
+                            colNum += 5;
+                            System.out.println(Colors.bold(Colors.yellow("Impulse exited prematurely.")));
+                            System.exit(0);
                         } else if (!line.equals("over") && !isOpenComment) {
                             new ImpulseError("CompileError", "I don't know what " + line.split(" ")[0] + " is.", lineNum, -1, this.fileName).exit();
                         }

@@ -112,6 +112,7 @@ public class Woo {
                 "./MathParser.java",
                 "./MathUtils.java",
                 "./BooleanParser.java",
+                "./REPL.java",
                 "./Procedure.java",
         };
 
