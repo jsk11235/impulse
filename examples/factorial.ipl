@@ -1,0 +1,14 @@
+$ Factorial: Get the factorial of a number.
+
+param number
+
+if number = 0
+    return 0
+over
+
+if number = 1
+    return 1
+over
+
+res factors = factorial: number - 1
+return factors * number

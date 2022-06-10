@@ -23,7 +23,7 @@ public class Woo {
 
     private static void installImpulse() {
         System.out.println("[INFO] Installing Impulse...");
-        System.out.print(Colors.progress(2, 20, "Creating an .iplrc file..."));
+        System.out.print(Colors.progress(2, 24, "Creating an .iplrc file..."));
         try { Thread.sleep(400); } catch (InterruptedException e) {}
         // Write a default .iplrc file to user home directory, this can be done by calling RCReader.resetConfig()
         if (RCReader.iplrcExists()) {
@@ -50,7 +50,7 @@ public class Woo {
 
         // Create an alias for the Impulse command so the user can type "impulse" instead of "java Procedure"
         System.out.print(Colors.bol());
-        System.out.print(Colors.progress(4, 20, "Reading .bashrc file..."));
+        System.out.print(Colors.progress(4, 24, "Reading .bashrc file..."));
         try { Thread.sleep(250); } catch (InterruptedException e) {}
 
         // Create a new alias in the user's .bashrc file
@@ -73,7 +73,7 @@ public class Woo {
 
         // Write the alias to the .bashrc file
         System.out.print(Colors.bol());
-        System.out.print(Colors.progress(6, 20, "Writing alias to .bashrc file..."));
+        System.out.print(Colors.progress(6, 24, "Writing alias to .bashrc file..."));
         if (!aliasExists) {
             try {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(System.getProperty("user.home") + "/.bashrc", true));
@@ -94,7 +94,7 @@ public class Woo {
 
         // Reload the .bashrc file
         System.out.print(Colors.bol());
-        System.out.print(Colors.progress(8, 20, "Reloading .bashrc file..."));
+        System.out.print(Colors.progress(8, 24, "Reloading .bashrc file..."));
         try {
             Runtime.getRuntime().exec("source ~/.bashrc");
         } catch (IOException e) {
@@ -113,13 +113,14 @@ public class Woo {
                 "./MathUtils.java",
                 "./BooleanParser.java",
                 "./REPL.java",
+                "./PrettyPrint.java",
                 "./Procedure.java",
         };
 
         // Compile all files in the order array
         for (int i = 0; i < order.length; i++) {
             System.out.print(Colors.bol());
-            System.out.print(Colors.progress(10 + i, 20, "Compiling " + order[i] + "..."));
+            System.out.print(Colors.progress(10 + i, 24, "Compiling " + order[i] + "..."));
             try {
                 Runtime.getRuntime().exec("javac " + order[i]);
             } catch (IOException e) {
@@ -134,7 +135,7 @@ public class Woo {
 
         // Check installation
         System.out.print(Colors.bol());
-        System.out.print(Colors.progress(18, 20, "Checking installation..."));
+        System.out.print(Colors.progress(22, 24, "Checking installation..."));
         if (RCReader.iplrcExists()) {
             try { Thread.sleep(100); } catch (InterruptedException e) {}
         } else {
@@ -144,7 +145,7 @@ public class Woo {
         // Print full progress bar and a message
         System.out.print(Colors.bol());
         try { Thread.sleep(1000); } catch (InterruptedException e) {}
-        System.out.print(Colors.progress(20, 20, "Impulse installation complete."));
+        System.out.print(Colors.progress(24, 24, "Impulse installation complete."));
         System.out.println(Colors.bold(Colors.green("\n[INFO] Impulse is now installed. To start Impulse, restart your terminal and run \"impulse\".")));
 
         // Exit the program
