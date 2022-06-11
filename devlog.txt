@@ -107,8 +107,13 @@ Ari Gurovich :: Worked on UML
 William Vongphanith :: More and more work on flowcharts, MAJOR MAJOR CODE CHANGES, installer, formatting
 Jacob Kirmayer :: Worked on v5
 Ari Gurovich :: UML
+==============================================================
 2022-06-10
 --------------------------------------------------------------
 William Vongphanith :: DEMOTIME
 Jacob Kirmayer :: DEMOTIME
 Ari Gurovich :: DEMOTIME
+==============================================================
+2022-06-11
+--------------------------------------------------------------
+William Vongphanith :: Delete garbage
