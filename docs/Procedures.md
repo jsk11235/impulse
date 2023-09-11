@@ -12,7 +12,7 @@ You can call other procedures from within a procedure. By default, all procedure
 You can call a procedure from the terminal by typing:
 
 ```
-impulse <procedure name> <param1> <param2> ...
+impulse <procedure directory> <procedure name> <param1> <param2> ...
 ```
 
 Before trying to do this, please make sure that the alias for Impulse exists (this should work after installing Impulse via Woo).
