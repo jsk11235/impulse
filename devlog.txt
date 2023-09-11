@@ -4,7 +4,7 @@ Ari Gurovich
 Jacob Kirmayer
 pd 6
 ---------------------
-(old project idea) --> Impulse Editor - a Java text editor, kinda like IntelliJ but without the Intelli, the IDE, or the GUI
+(old project idea) Impulse Editor - a Java text editor, kinda like IntelliJ but without the Intelli, the IDE, or the GUI
 
 
 /////////// Zone of Reflection \\\\\\\\\\\
