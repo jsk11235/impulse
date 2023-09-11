@@ -15,12 +15,12 @@ APCS1
     Our product is called... <strong>Impulse Language</strong>!<br>
     It is a novel performant programming language that is based on procedures and files.
   <h2>Prerequisites</h2>
-    - JDK installed
-    - bash shell
+    - JDK installed <br/>
+    - bash shell <br/>
   <h2>Launch</h2>
-    <code>javac Woo.java && java Woo</code> (One time)
-    <code>source ~/.bashrc </code>
-    <code>impulse [directory] [file (without .ipl)] [params]</code>
+    <code>javac Woo.java && java Woo</code> (One time) <br/>
+    <code>source ~/.bashrc </code> <br/>
+    <code>impulse [directory] [file (without .ipl)] [params]</code> <br/>
   </p>
   </body>
 </html>
